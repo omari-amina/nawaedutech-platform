@@ -26,28 +26,33 @@ module.exports = {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				// Semantic Brand Colors
 				primary: {
-					DEFAULT: '#340690',
-					light: '#864bf5',
+					DEFAULT: '#340690', // Trust & Depth (The Core)
+					light: '#864bf5',   // Tech & Creativity
 					foreground: '#ffffff',
 				},
 				secondary: {
-					DEFAULT: '#5f2cc7',
+					DEFAULT: '#5f2cc7', // Innovation
 					foreground: '#ffffff',
 				},
 				accent: {
-					DEFAULT: '#f3b942',
+					DEFAULT: '#f3b942', // Warmth & Motivation
 					foreground: '#000000',
 				},
 				muted: {
-					DEFAULT: '#e6e3e6',
-					foreground: '#000000',
+					DEFAULT: '#e6e3e6', // Visual Comfort
+					foreground: '#340690',
 				},
 				destructive: {
 					DEFAULT: '#dc2626',
 					foreground: '#ffffff',
 				},
 				card: {
+					DEFAULT: '#ffffff',
+					foreground: '#000000',
+				},
+				popover: {
 					DEFAULT: '#ffffff',
 					foreground: '#000000',
 				},

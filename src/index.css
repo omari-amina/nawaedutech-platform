@@ -6,12 +6,12 @@
 
 @layer base {
   :root {
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* softer, friendlier corners */
     --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 258 88% 26%;
+    --foreground: 260 20% 10%; /* Very dark purple-gray for better readability/harmony than pure black */
+    --border: 260 10% 90%;
+    --input: 260 10% 90%;
+    --ring: 258 88% 26%; /* #340690 */
   }
 
   * {
@@ -19,15 +19,27 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+    /* Smooth scrolling for a "calm" feel */
+    scroll-behavior: smooth;
   }
 
+  /* Force Almarai for RTL specifically */
   [dir="rtl"] {
-    @apply font-arabic;
+    font-family: 'Almarai', sans-serif;
   }
 }
 
-
+/* Custom "Warm" utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .shadow-soft {
+    box-shadow: 0 4px 20px -2px rgba(52, 6, 144, 0.1);
+  }
+}
 
 img {
   object-position: top;

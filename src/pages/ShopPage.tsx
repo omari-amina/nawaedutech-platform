@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Filter, Package } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -73,7 +73,7 @@ export function ShopPage() {
               .from('cart')
               .update({ quantity: cartItem.quantity + 1 })
               .eq('id', cartItem.id);
-            
+
             if (updateError) {
               console.error('Update error:', updateError);
               alert('Failed to update cart quantity');
@@ -94,98 +94,94 @@ export function ShopPage() {
   };
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen py-16 bg-muted/30">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-16 px-4">
+          <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">{t('nav.shop')}</span>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 bg-clip-text text-transparent bg-gradient-to-r from-accent to-secondary">
             {t('shop.title')}
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
             {t('shop.subtitle')}
           </p>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-6 py-2 rounded-lg font-medium transition ${
-              filter === 'all'
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
+          <FilterButton active={filter === 'all'} onClick={() => setFilter('all')}>
             {t('shop.categories.all')}
-          </button>
-          <button
-            onClick={() => setFilter('teachers')}
-            className={`px-6 py-2 rounded-lg font-medium transition ${
-              filter === 'teachers'
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
+          </FilterButton>
+          <FilterButton active={filter === 'teachers'} onClick={() => setFilter('teachers')}>
             {t('shop.categories.teachers')}
-          </button>
-          <button
-            onClick={() => setFilter('students')}
-            className={`px-6 py-2 rounded-lg font-medium transition ${
-              filter === 'students'
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
+          </FilterButton>
+          <FilterButton active={filter === 'students'} onClick={() => setFilter('students')}>
             {t('shop.categories.students')}
-          </button>
-          <button
-            onClick={() => setFilter('kids')}
-            className={`px-6 py-2 rounded-lg font-medium transition ${
-              filter === 'kids'
-                ? 'bg-primary text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
+          </FilterButton>
+          <FilterButton active={filter === 'kids'} onClick={() => setFilter('kids')}>
             {t('shop.categories.kids')}
-          </button>
+          </FilterButton>
         </div>
 
         {/* Products Grid */}
         {loading ? (
-          <div className="text-center py-12">
+          <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((product) => (
               <div
                 key={product.id}
-                className="bg-white rounded-lg shadow-md hover:shadow-lg transition overflow-hidden"
+                className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1 block h-full flex flex-col"
               >
-                <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200"></div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
+                <div className="h-56 bg-gradient-to-br from-gray-50 to-gray-100 relative flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  {/* Placeholder illustration */}
+                  <div className="text-gray-200 group-hover:scale-110 transition-transform duration-500">
+                    <Package size={80} />
+                  </div>
+                  {product.stock_quantity === 0 && (
+                    <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
+                      <span className="bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg">
+                        {t('shop.outOfStock')}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="flex items-start justify-between mb-3">
+                    <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-md uppercase tracking-wide">
+                      {product.target_audience}
+                    </span>
+                    {product.stock_quantity > 0 && product.stock_quantity < 5 && (
+                      <span className="text-xs font-medium text-orange-600">
+                        Only {product.stock_quantity} left
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="text-xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">
                     {isRTL ? product.name_ar : product.name_en}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3">
+                  <p className="text-gray-600 mb-6 line-clamp-2 text-sm leading-relaxed flex-1">
                     {isRTL ? product.description_ar : product.description_en}
                   </p>
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-2xl font-bold text-primary">
-                      ${product.price}
+
+                  <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between gap-4">
+                    <span className="text-2xl font-bold text-gray-900">
+                      D.Z {product.price}
                     </span>
-                    <span className={`text-sm ${product.stock_quantity > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {product.stock_quantity > 0 ? t('shop.inStock') : t('shop.outOfStock')}
-                    </span>
+                    <button
+                      onClick={() => addToCart(product.id)}
+                      disabled={product.stock_quantity === 0}
+                      className="flex-1 bg-black text-white px-4 py-2.5 rounded-xl hover:bg-primary transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-black/10 hover:shadow-primary/25"
+                    >
+                      <ShoppingCart size={18} className="me-2" />
+                      {t('common.addToCart')}
+                    </button>
                   </div>
-                  <button
-                    onClick={() => addToCart(product.id)}
-                    disabled={product.stock_quantity === 0}
-                    className="w-full bg-accent text-black px-4 py-2 rounded-lg hover:bg-yellow-500 transition font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                  >
-                    <ShoppingCart size={20} className="mr-2" />
-                    {t('common.addToCart')}
-                  </button>
                 </div>
               </div>
             ))}
@@ -193,11 +189,29 @@ export function ShopPage() {
         )}
 
         {!loading && products.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No products found in this category.</p>
+          <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
+            <Filter size={48} className="mx-auto text-gray-300 mb-4" />
+            <p className="text-gray-500 text-lg">No products found in this category.</p>
+            <button onClick={() => setFilter('all')} className="mt-4 text-primary font-medium hover:underline">
+              View all products
+            </button>
           </div>
         )}
       </div>
     </div>
   );
+}
+
+function FilterButton({ children, active, onClick }: { children: React.ReactNode, active: boolean, onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 ${active
+          ? 'bg-black text-white shadow-lg shadow-black/25'
+          : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-black border border-transparent hover:border-gray-200'
+        }`}
+    >
+      {children}
+    </button>
+  )
 }

@@ -12,6 +12,8 @@ import { SignupPage } from './pages/SignupPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { CartPage } from './pages/CartPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { AboutPage } from './pages/AboutPage';
+import { ContactPage } from './pages/ContactPage';
 import './lib/i18n';
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
                 <Route path="/shop" element={<ShopPage />} />
                 <Route path="/courses" element={<CoursesPage />} />
                 <Route path="/courses/:id" element={<CourseDetailPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<ContactPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
