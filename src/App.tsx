@@ -14,6 +14,9 @@ import { CartPage } from './pages/CartPage';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
+import { PrintedProductLanding } from './pages/PrintedProductLanding';
+import { DigitalProductLanding } from './pages/DigitalProductLanding';
+import { CourseLanding } from './pages/CourseLanding';
 import './lib/i18n';
 
 function App() {
@@ -36,6 +39,11 @@ function App() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/admin" element={<AdminDashboard />} />
+
+                {/* Landing Page Templates - For Demo/Preview */}
+                <Route path="/landing/printed-product" element={<PrintedProductLanding />} />
+                <Route path="/landing/digital-product" element={<DigitalProductLanding />} />
+                <Route path="/landing/course" element={<CourseLanding />} />
               </Routes>
             </main>
             <Footer />

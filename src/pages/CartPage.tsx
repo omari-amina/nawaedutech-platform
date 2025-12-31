@@ -162,146 +162,185 @@ export function CartPage() {
   }
 
   return (
-    <div className="min-h-screen py-16 bg-muted/30">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen py-16 bg-gray-50/50 font-sans">
+      <div className="container mx-auto px-4 max-w-6xl">
 
-        <div className="mb-8">
-          <button
-            onClick={() => navigate('/shop')}
-            className="inline-flex items-center text-gray-500 hover:text-primary transition-colors group mb-4"
-          >
-            <ArrowLeft className={`w-4 h-4 mt-0.5 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'} group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform`} />
-            {t('cart.continueShopping')}
-          </button>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-            {t('cart.title')}
-          </h1>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <button
+              onClick={() => navigate('/shop')}
+              className="inline-flex items-center text-[#340690]/60 hover:text-[#340690] transition-all font-black uppercase tracking-widest text-xs group mb-6"
+            >
+              <ArrowLeft className={`w-4 h-4 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'} group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform`} />
+              {t('cart.continueShopping')}
+            </button>
+            <h1 className="text-4xl md:text-5xl font-black text-[#340690]">
+              {t('cart.title')}
+              <span className="text-[#f3b942] ml-4 text-2xl opacity-50">({cartItems.length})</span>
+            </h1>
+          </div>
         </div>
 
         {cartItems.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
-            <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-              <ShoppingBag size={40} className="text-gray-300" />
+          <div className="text-center py-32 bg-white rounded-[3rem] shadow-xl border border-gray-100 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#340690]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+            <div className="relative z-10">
+              <div className="w-32 h-32 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-sm ring-1 ring-gray-100">
+                <ShoppingBag size={48} className="text-gray-200" />
+              </div>
+              <p className="text-2xl text-gray-400 mb-10 font-medium">{t('cart.empty')}</p>
+              <button
+                onClick={() => navigate('/shop')}
+                className="bg-[#340690] text-white px-12 py-5 rounded-2xl hover:bg-[#5f2cc7] hover:scale-105 transition-all shadow-2xl shadow-[#340690]/20 font-black text-lg"
+              >
+                {t('cart.continueShopping')}
+              </button>
             </div>
-            <p className="text-xl text-gray-600 mb-6 font-medium">{t('cart.empty')}</p>
-            <button
-              onClick={() => navigate('/shop')}
-              className="bg-primary text-white px-8 py-3 rounded-xl hover:bg-primary-light transition shadow-lg shadow-primary/20 font-bold"
-            >
-              {t('cart.continueShopping')}
-            </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Cart Items */}
-            <div className="lg:col-span-2 space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Cart Items List */}
+            <div className="lg:col-span-7 space-y-6">
               {cartItems.map((item) => (
-                <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center transition-all hover:shadow-md">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">
+                <div key={item.id} className="group bg-white rounded-[2rem] shadow-sm border border-gray-100 p-8 flex flex-col sm:flex-row items-center gap-8 transition-all hover:shadow-xl hover:border-[#340690]/10">
+                  <div className="w-24 h-24 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <ShoppingBag size={32} className="text-gray-300 group-hover:text-[#340690] transition-colors" />
+                  </div>
+
+                  <div className="flex-1 text-center sm:text-left rtl:sm:text-right">
+                    <h3 className="text-xl font-black text-[#340690] mb-2">
                       {isRTL ? item.product.name_ar : item.product.name_en}
                     </h3>
-                    <p className="text-xl font-bold text-primary">
-                      D.Z {item.product.price}
+                    <p className="text-2xl font-black text-[#f3b942]">
+                      {item.product.price} <span className="text-sm opacity-60 font-bold">{isRTL ? 'د.ج' : 'DZD'}</span>
                     </p>
                   </div>
-                  <div className="flex items-center space-x-6 rtl:space-x-reverse">
-                    <div className="flex items-center bg-gray-50 rounded-xl border border-gray-200">
+
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-[#340690]/20 transition-all p-1">
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="px-3 py-1.5 hover:bg-gray-200 rounded-s-xl transition-colors font-medium text-lg"
+                        className="w-10 h-10 flex items-center justify-center hover:bg-white hover:text-[#340690] transition-all rounded-xl font-black text-xl"
                       >
                         -
                       </button>
-                      <span className="px-4 py-1.5 font-semibold text-gray-700 min-w-[2rem] text-center">{item.quantity}</span>
+                      <span className="w-12 text-center font-black text-[#340690]">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="px-3 py-1.5 hover:bg-gray-200 rounded-e-xl transition-colors font-medium text-lg"
+                        className="w-10 h-10 flex items-center justify-center hover:bg-white hover:text-[#340690] transition-all rounded-xl font-black text-xl"
                       >
                         +
                       </button>
                     </div>
+
                     <button
                       onClick={() => removeFromCart(item.id)}
-                      className="text-gray-400 hover:text-red-600 p-2 rounded-full hover:bg-red-50 transition-colors"
+                      className="w-12 h-12 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 transition-all rounded-2xl"
                       title="Remove item"
                     >
-                      <Trash2 size={20} />
+                      <Trash2 size={24} />
                     </button>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Order Summary */}
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Order Summary</h2>
-                <div className="space-y-4 mb-8">
-                  <div className="flex justify-between text-gray-600">
-                    <span>{t('cart.subtotal')}</span>
-                    <span className="font-semibold text-gray-900">D.Z {calculateSubtotal().toFixed(2)}</span>
+            {/* Order Summary Sidebar */}
+            <div className="lg:col-span-5">
+              <div className="bg-[#340690] text-white rounded-[3rem] shadow-2xl p-10 sticky top-24 overflow-hidden">
+                {/* Decoration */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+
+                <h2 className="text-2xl font-black mb-10 uppercase tracking-widest text-[#f3b942] relative z-10">Order Summary</h2>
+
+                <div className="space-y-6 mb-10 relative z-10">
+                  <div className="flex justify-between items-center text-white/60 font-bold">
+                    <span className="uppercase text-xs tracking-widest">{t('cart.subtotal')}</span>
+                    <span className="text-xl text-white">{calculateSubtotal()} <span className="text-xs">DZD</span></span>
                   </div>
-                  <div className="flex justify-between text-gray-600">
-                    <span>{t('cart.shipping')}</span>
-                    <span className="font-semibold text-gray-900">D.Z 500.00</span>
+                  <div className="flex justify-between items-center text-white/60 font-bold">
+                    <span className="uppercase text-xs tracking-widest">{t('cart.shipping')}</span>
+                    <span className="text-xl text-white">500 <span className="text-xs">DZD</span></span>
                   </div>
-                  <div className="border-t border-dashed border-gray-200 pt-4 flex justify-between items-end">
-                    <span className="font-bold text-lg text-gray-900">{t('cart.total')}</span>
-                    <span className="font-bold text-2xl text-primary">
-                      D.Z {(calculateSubtotal() + 500).toFixed(2)}
-                    </span>
+                  <div className="pt-6 border-t border-white/10 flex justify-between items-end">
+                    <span className="font-black text-lg uppercase tracking-widest text-[#f3b942]">{t('cart.total')}</span>
+                    <div className="text-right">
+                      <span className="block text-4xl font-black leading-none">
+                        {(calculateSubtotal() + 500)}
+                      </span>
+                      <span className="text-xs font-bold opacity-50 uppercase tracking-widest">Algerian Dinar</span>
+                    </div>
                   </div>
                 </div>
+
                 {!showCheckoutForm ? (
                   <button
                     onClick={() => setShowCheckoutForm(true)}
-                    className="w-full bg-black text-white py-4 rounded-xl hover:bg-primary transition-all font-bold shadow-lg shadow-black/10 flex items-center justify-center group"
+                    className="w-full bg-[#f3b942] text-[#340690] py-6 rounded-2xl hover:bg-white hover:scale-[1.02] transition-all font-black text-xl shadow-xl shadow-black/20 flex items-center justify-center gap-3 group relative z-10"
                   >
                     {t('cart.checkout')}
-                    <ArrowRight className={`w-5 h-5 ml-2 transition-transform group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`} />
+                    <ArrowRight className={`w-6 h-6 transition-transform group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`} />
                   </button>
                 ) : (
-                  <div className="space-y-6 animate-in fade-in slide-in-from-top-4 duration-300">
-                    <div>
-                      <h3 className="font-bold mb-3 text-gray-900">Shipping Details</h3>
-                      <div className="space-y-3">
-                        <input type="text" placeholder="Full Name" value={shippingAddress.fullName} onChange={(e) => setShippingAddress({ ...shippingAddress, fullName: e.target.value })} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
-                        <input type="text" placeholder="Address" value={shippingAddress.address} onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
-                        <input type="text" placeholder="City" value={shippingAddress.city} onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
-                        <input type="tel" placeholder="Phone Number" value={shippingAddress.phone} onChange={(e) => setShippingAddress({ ...shippingAddress, phone: e.target.value })} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="font-bold mb-3 text-gray-900">Payment Method</h3>
-                      <div className="space-y-3">
-                        <label className={`flex items-center p-4 border rounded-xl cursor-pointer transition-all ${paymentMethod === 'postal' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary/50'}`}>
-                          <input type="radio" name="payment" value="postal" checked={paymentMethod === 'postal'} onChange={() => setPaymentMethod('postal')} className="mr-3 text-primary focus:ring-primary" />
-                          <div className="flex-1">
-                            <div className="flex items-center text-gray-900"><CreditCard size={18} className="me-2 text-primary" /><span className="font-semibold">Postal Mobile Payment</span></div>
-                            <p className="text-sm text-gray-500 mt-0.5">سداد بريدي - RIP/CCP</p>
-                          </div>
-                        </label>
-                        <label className={`flex items-center p-4 border rounded-xl cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-primary bg-primary/5' : 'border-gray-200 hover:border-primary/50'}`}>
-                          <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="mr-3 text-primary focus:ring-primary" />
-                          <div className="flex-1 flex items-center text-gray-900"><Banknote size={18} className="me-2 text-green-600" /><span className="font-semibold">Cash on Delivery</span></div>
-                        </label>
-                      </div>
-                    </div>
-                    {paymentMethod === 'postal' && (
-                      <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
-                        <h3 className="font-bold mb-3 text-sm text-gray-900">Postal Payment Details</h3>
-                        <div className="space-y-3">
-                          <input type="text" placeholder="RIP Number (Relevé d'Identité Postal)" value={postalDetails.ripNumber} onChange={(e) => setPostalDetails({ ...postalDetails, ripNumber: e.target.value })} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" />
-                          <input type="text" placeholder="CCP Number (Compte Courant Postal)" value={postalDetails.ccpNumber} onChange={(e) => setPostalDetails({ ...postalDetails, ccpNumber: e.target.value })} className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm" />
+                  <div className="space-y-8 animate-in fade-in slide-in-from-bottom-6 duration-500 relative z-10">
+                    <div className="space-y-6">
+                      <h3 className="font-black text-sm uppercase tracking-widest text-[#f3b942]">Shipping Details</h3>
+                      <div className="grid gap-4">
+                        <input type="text" placeholder="Full Name" value={shippingAddress.fullName} onChange={(e) => setShippingAddress({ ...shippingAddress, fullName: e.target.value })} className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-2xl focus:outline-none focus:border-[#f3b942] focus:bg-white/10 transition-all font-bold placeholder:text-white/30" />
+                        <input type="text" placeholder="Address" value={shippingAddress.address} onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })} className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-2xl focus:outline-none focus:border-[#f3b942] focus:bg-white/10 transition-all font-bold placeholder:text-white/30" />
+                        <div className="grid grid-cols-2 gap-4">
+                          <input type="text" placeholder="City" value={shippingAddress.city} onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })} className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-2xl focus:outline-none focus:border-[#f3b942] focus:bg-white/10 transition-all font-bold placeholder:text-white/30" />
+                          <input type="tel" placeholder="Phone" value={shippingAddress.phone} onChange={(e) => setShippingAddress({ ...shippingAddress, phone: e.target.value })} className="w-full px-6 py-4 bg-white/5 border-2 border-white/10 rounded-2xl focus:outline-none focus:border-[#f3b942] focus:bg-white/10 transition-all font-bold placeholder:text-white/30" />
                         </div>
                       </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      <h3 className="font-black text-sm uppercase tracking-widest text-[#f3b942]">Payment Method</h3>
+                      <div className="grid gap-4">
+                        <label className={`flex items-center p-6 border-2 rounded-2xl cursor-pointer transition-all ${paymentMethod === 'postal' ? 'border-[#f3b942] bg-white/5' : 'border-white/10 hover:border-white/30'}`}>
+                          <input type="radio" name="payment" value="postal" checked={paymentMethod === 'postal'} onChange={() => setPaymentMethod('postal')} className="sr-only peer" />
+                          <div className={`w-6 h-6 rounded-full border-2 mr-4 flex items-center justify-center ${paymentMethod === 'postal' ? 'border-[#f3b942]' : 'border-white/20'}`}>
+                            {paymentMethod === 'postal' && <div className="w-2.5 h-2.5 bg-[#f3b942] rounded-full" />}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3">
+                              <CreditCard size={20} className="text-[#f3b942]" />
+                              <span className="font-black uppercase tracking-widest text-xs">Postal Mobile</span>
+                            </div>
+                          </div>
+                        </label>
+
+                        <label className={`flex items-center p-6 border-2 rounded-2xl cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-[#f3b942] bg-white/5' : 'border-white/10 hover:border-white/30'}`}>
+                          <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} className="sr-only peer" />
+                          <div className={`w-6 h-6 rounded-full border-2 mr-4 flex items-center justify-center ${paymentMethod === 'cod' ? 'border-[#f3b942]' : 'border-white/20'}`}>
+                            {paymentMethod === 'cod' && <div className="w-2.5 h-2.5 bg-[#f3b942] rounded-full" />}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3">
+                              <Banknote size={20} className="text-[#f3b942]" />
+                              <span className="font-black uppercase tracking-widest text-xs">Cash on Delivery</span>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    {paymentMethod === 'postal' && (
+                      <div className="p-8 bg-white/5 rounded-[2rem] border-2 border-[#f3b942]/20 space-y-4">
+                        <p className="text-xs font-black uppercase tracking-widest text-[#f3b942]">Postal Details Required</p>
+                        <input type="text" placeholder="RIP Number" value={postalDetails.ripNumber} onChange={(e) => setPostalDetails({ ...postalDetails, ripNumber: e.target.value })} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#f3b942] transition-all font-bold text-sm placeholder:text-white/30" />
+                        <input type="text" placeholder="CCP Number" value={postalDetails.ccpNumber} onChange={(e) => setPostalDetails({ ...postalDetails, ccpNumber: e.target.value })} className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#f3b942] transition-all font-bold text-sm placeholder:text-white/30" />
+                      </div>
                     )}
-                    <div className="space-y-3 pt-2">
-                      <button onClick={handleCheckout} className="w-full bg-accent text-black py-4 rounded-xl hover:bg-yellow-500 transition-all font-bold shadow-lg shadow-yellow-500/20">
-                        Confirm Order
+
+                    <div className="pt-6 space-y-4">
+                      <button onClick={handleCheckout} className="w-full bg-[#f3b942] text-[#340690] py-6 rounded-2xl hover:bg-white transition-all font-black text-xl shadow-2xl shadow-black/30">
+                        Confirm & Place Order
                       </button>
-                      <button onClick={() => setShowCheckoutForm(false)} className="w-full text-gray-500 hover:text-gray-900 py-2 font-medium">Cancel</button>
+                      <button onClick={() => setShowCheckoutForm(false)} className="w-full text-white/50 hover:text-white transition-colors font-black uppercase tracking-widest text-xs py-2">
+                        Back to Cart
+                      </button>
                     </div>
                   </div>
                 )}

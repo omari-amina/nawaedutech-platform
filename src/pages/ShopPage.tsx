@@ -94,21 +94,26 @@ export function ShopPage() {
   };
 
   return (
-    <div className="min-h-screen py-16 bg-muted/30">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-16 px-4">
-          <span className="text-primary font-bold tracking-wider uppercase text-sm mb-2 block">{t('nav.shop')}</span>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 bg-clip-text text-transparent bg-gradient-to-r from-accent to-secondary">
+    <div className="min-h-screen bg-white font-sans">
+      {/* 1. HERO SECTION */}
+      <section className="relative py-24 px-4 text-center overflow-hidden bg-gradient-to-br from-[#340690] via-[#5f2cc7] to-[#864bf5] mb-20">
+        {/* Decorative Elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#f3b942]/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+
+        <div className="container mx-auto relative z-10 py-10">
+          <h1 className="text-4xl sm:text-6xl font-black text-white mb-6 leading-tight">
             {t('shop.title')}
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed font-medium">
             {t('shop.subtitle')}
           </p>
         </div>
+      </section>
 
-        {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+      <div className="container mx-auto px-4 pb-24">
+        {/* 2. FILTERS */}
+        <div className="flex flex-wrap justify-center gap-4 mb-20">
           <FilterButton active={filter === 'all'} onClick={() => setFilter('all')}>
             {t('shop.categories.all')}
           </FilterButton>
@@ -123,63 +128,83 @@ export function ShopPage() {
           </FilterButton>
         </div>
 
-        {/* Products Grid */}
+        {/* 3. PRODUCTS GRID */}
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-[#340690] border-t-transparent"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
             {products.map((product) => (
               <div
                 key={product.id}
-                className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1 block h-full flex flex-col"
+                className="group bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col"
               >
-                <div className="h-56 bg-gradient-to-br from-gray-50 to-gray-100 relative flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  {/* Placeholder illustration */}
-                  <div className="text-gray-200 group-hover:scale-110 transition-transform duration-500">
-                    <Package size={80} />
+                {/* Product Image Area with Gradient Background */}
+                <div className="h-64 bg-gradient-to-br from-gray-50 to-muted/30 relative flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-[#340690]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                  {/* Decorative Elements Background */}
+                  <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#340690]/5 rounded-full blur-2xl group-hover:bg-[#340690]/10 transition-all"></div>
+                  <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#f3b942]/10 rounded-full blur-2xl"></div>
+
+                  <div className="text-[#340690]/20 group-hover:text-[#340690]/30 group-hover:scale-110 transition-all duration-700">
+                    <Package size={100} strokeWidth={1} />
                   </div>
-                  {product.stock_quantity === 0 && (
-                    <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center">
-                      <span className="bg-red-500 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg">
+
+                  {/* Stock Badges */}
+                  <div className="absolute top-4 right-4 rtl:left-4 rtl:right-auto flex flex-col gap-2">
+                    {product.stock_quantity === 0 && (
+                      <span className="bg-red-500 text-white px-4 py-1.5 rounded-full text-xs font-black shadow-lg">
                         {t('shop.outOfStock')}
                       </span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-start justify-between mb-3">
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-md uppercase tracking-wide">
-                      {product.target_audience}
-                    </span>
+                    )}
                     {product.stock_quantity > 0 && product.stock_quantity < 5 && (
-                      <span className="text-xs font-medium text-orange-600">
-                        Only {product.stock_quantity} left
+                      <span className="bg-orange-500 text-white px-4 py-1.5 rounded-full text-xs font-black shadow-lg">
+                        {isRTL ? `باقي ${product.stock_quantity} فقط` : `Only ${product.stock_quantity} left`}
                       </span>
                     )}
                   </div>
+                </div>
 
-                  <h3 className="text-xl font-bold mb-3 text-gray-900 group-hover:text-primary transition-colors">
+                {/* Product Info */}
+                <div className="p-8 flex-1 flex flex-col">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-[10px] font-black text-[#f3b942] bg-[#f3b942]/10 px-3 py-1.5 rounded-full uppercase tracking-widest">
+                      {product.target_audience}
+                    </span>
+                  </div>
+
+                  <h3 className="text-xl font-black mb-3 text-gray-900 group-hover:text-[#340690] transition-colors leading-tight">
                     {isRTL ? product.name_ar : product.name_en}
                   </h3>
-                  <p className="text-gray-600 mb-6 line-clamp-2 text-sm leading-relaxed flex-1">
+
+                  <p className="text-gray-500 mb-8 line-clamp-2 text-sm leading-relaxed flex-1">
                     {isRTL ? product.description_ar : product.description_en}
                   </p>
 
-                  <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between gap-4">
-                    <span className="text-2xl font-bold text-gray-900">
-                      D.Z {product.price}
-                    </span>
+                  <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between gap-4">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-0.5">
+                        {isRTL ? 'السعر' : 'Price'}
+                      </span>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-2xl font-black text-[#340690]">
+                          {product.price}
+                        </span>
+                        <span className="text-sm font-bold text-[#340690]">
+                          {isRTL ? 'د.ج' : 'DZD'}
+                        </span>
+                      </div>
+                    </div>
+
                     <button
                       onClick={() => addToCart(product.id)}
                       disabled={product.stock_quantity === 0}
-                      className="flex-1 bg-black text-white px-4 py-2.5 rounded-xl hover:bg-primary transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-black/10 hover:shadow-primary/25"
+                      title={isRTL ? 'أضف إلى السلة' : 'Add to Cart'}
+                      className="bg-[#340690] text-white p-4 rounded-2xl hover:bg-[#f3b942] hover:text-[#340690] transition-all duration-500 disabled:opacity-30 disabled:grayscale shadow-lg shadow-[#340690]/20 hover:shadow-[#f3b942]/40 group/btn"
                     >
-                      <ShoppingCart size={18} className="me-2" />
-                      {t('common.addToCart')}
+                      <ShoppingCart size={22} className="group-hover/btn:scale-110 transition-transform" />
                     </button>
                   </div>
                 </div>
@@ -188,12 +213,20 @@ export function ShopPage() {
           </div>
         )}
 
+        {/* 4. EMPTY STATE */}
         {!loading && products.length === 0 && (
-          <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
-            <Filter size={48} className="mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-500 text-lg">No products found in this category.</p>
-            <button onClick={() => setFilter('all')} className="mt-4 text-primary font-medium hover:underline">
-              View all products
+          <div className="text-center py-24 bg-muted/20 rounded-[3rem] border-2 border-dashed border-gray-100 max-w-lg mx-auto">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+              <Filter size={32} className="text-gray-300" />
+            </div>
+            <p className="text-gray-500 text-xl font-bold mb-6">
+              {isRTL ? 'لا توجد منتجات في هذا القسم حالياً' : 'No products in this category yet'}
+            </p>
+            <button
+              onClick={() => setFilter('all')}
+              className="bg-[#340690] text-white px-10 py-4 rounded-2xl font-black hover:scale-105 transition-all shadow-xl shadow-[#340690]/20"
+            >
+              {isRTL ? 'عرض كل المنتجات' : 'Show All Products'}
             </button>
           </div>
         )}
@@ -206,9 +239,9 @@ function FilterButton({ children, active, onClick }: { children: React.ReactNode
   return (
     <button
       onClick={onClick}
-      className={`px-6 py-2.5 rounded-full font-medium transition-all duration-300 ${active
-          ? 'bg-black text-white shadow-lg shadow-black/25'
-          : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-black border border-transparent hover:border-gray-200'
+      className={`px-8 py-3.5 rounded-2xl font-black text-lg transition-all duration-500 transform ${active
+        ? 'bg-[#340690] text-white shadow-2xl shadow-[#340690]/30 -translate-y-1'
+        : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-[#340690] border border-gray-100 hover:border-[#340690]/20'
         }`}
     >
       {children}

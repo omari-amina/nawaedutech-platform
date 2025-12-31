@@ -187,246 +187,296 @@ export function CourseDetailPage() {
   }
 
   return (
-    <div className="min-h-screen py-12 bg-muted/30">
+    <div className="min-h-screen py-12 bg-gray-50/50 font-sans">
       <div className="container mx-auto px-4">
 
-        <Link to="/courses" className="inline-flex items-center text-gray-500 hover:text-primary mb-8 transition-colors group">
-          <ArrowLeft className={`w-4 h-4 mt-0.5 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'} group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform`} />
+        <Link to="/courses" className="inline-flex items-center text-[#340690]/60 hover:text-[#340690] mb-8 transition-all font-black uppercase tracking-widest text-xs group">
+          <ArrowLeft className={`w-4 h-4 ${isRTL ? 'ml-2 rotate-180' : 'mr-2'} group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform`} />
           {t('nav.courses')}
         </Link>
 
-        {/* Course Header */}
-        <div className="bg-gradient-to-br from-primary via-[#4a1c9e] to-secondary text-white rounded-3xl p-8 md:p-12 mb-8 shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-accent opacity-10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+        {/* Course Header - Premium Dark Gradient */}
+        <div className="bg-gradient-to-br from-[#340690] via-[#4a1c9e] to-[#5f2cc7] text-white rounded-[3rem] p-8 md:p-16 mb-12 shadow-2xl relative overflow-hidden">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-[30rem] h-[30rem] bg-[#f3b942]/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
 
-          <div className="relative z-10 grid md:grid-cols-3 gap-8 items-start">
-            <div className="md:col-span-2">
-              <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-sm font-medium mb-4">
-                {t(`courses.level.${course.level}`)}
-              </span>
-              <h1 className="text-3xl md:text-5xl font-bold mb-4 leading-tight">
-                {isRTL ? course.title_ar : course.title_en}
-              </h1>
-              <p className="text-lg text-blue-100/90 mb-8 leading-relaxed max-w-2xl">
-                {isRTL ? course.description_ar : course.description_en}
-              </p>
-
-              <div className="flex flex-wrap gap-6 items-center">
-                <div className="flex items-center">
-                  <Clock size={20} className="me-2 text-accent" />
-                  <span className="font-medium">{course.duration_hours} {t('courses.duration')}</span>
-                </div>
-                <div className="flex items-center">
-                  <BookOpen size={20} className="me-2 text-accent" />
-                  <span className="font-medium">{lessons.length} lessons</span>
-                </div>
-                <div className="flex items-center">
-                  <Star size={20} className="me-2 text-accent" />
-                  <span className="font-medium">4.8 (120 reviews)</span>
-                </div>
-
+          <div className="relative z-10 grid lg:grid-cols-3 gap-12 items-center">
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full text-xs font-black uppercase tracking-widest text-[#f3b942]">
+                  {t(`courses.level.${course.level}`)}
+                </span>
                 {enrollment && enrollment.progress_percentage >= 100 && (
-                  <div className="flex items-center bg-green-500/20 border border-green-500/30 text-green-100 px-3 py-1 rounded-full">
-                    <Award size={18} className="me-1.5" />
-                    <span className="text-sm font-semibold">Completed</span>
+                  <div className="flex items-center bg-green-500/20 border border-green-500/30 text-green-300 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
+                    <Award size={14} className="me-2" />
+                    <span>Completed</span>
                   </div>
                 )}
               </div>
-            </div>
 
-            {/* Price Card (Desktop) */}
-            <div className="hidden md:block bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 text-center">
-              {!enrollment ? (
-                <>
-                  <p className="text-sm text-blue-200 uppercase tracking-wider font-semibold mb-2">Price</p>
-                  <div className="text-4xl font-bold text-white mb-6">
-                    {course.is_free ? t('common.free') : `$${course.price}`}
+              <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                {isRTL ? course.title_ar : course.title_en}
+              </h1>
+
+              <p className="text-xl text-white/70 mb-10 leading-relaxed max-w-2xl font-medium">
+                {isRTL ? course.description_ar : course.description_en}
+              </p>
+
+              <div className="flex flex-wrap gap-8 items-center pt-8 border-t border-white/10">
+                <div className="flex items-center group">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center me-4 group-hover:bg-[#f3b942]/20 transition-colors">
+                    <Clock size={20} className="text-[#f3b942]" />
                   </div>
-                  <button
-                    onClick={handleEnroll}
-                    disabled={enrolling}
-                    className="w-full bg-accent text-primary text-lg font-bold px-6 py-3 rounded-xl hover:bg-white transition-all shadow-lg shadow-black/20 mb-3"
-                  >
-                    {enrolling ? 'Enrolling...' : t('common.enroll')}
-                  </button>
-                  <p className="text-xs text-blue-200">30-day money-back guarantee</p>
-                </>
-              ) : (
-                <div className="text-center">
-                  <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-lg">
-                    <CheckCircle size={40} />
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-0.5">Duration</p>
+                    <p className="font-bold">{course.duration_hours} {t('courses.duration')}</p>
                   </div>
-                  <h3 className="text-xl font-bold mb-2">Enrolled</h3>
-                  <p className="text-sm text-blue-100">You have access to this course.</p>
                 </div>
-              )}
+
+                <div className="flex items-center group">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center me-4 group-hover:bg-[#f3b942]/20 transition-colors">
+                    <BookOpen size={20} className="text-[#f3b942]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-0.5">Content</p>
+                    <p className="font-bold">{lessons.length} {isRTL ? 'دروس' : 'lessons'}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center group">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center me-4 group-hover:bg-[#f3b942]/20 transition-colors">
+                    <Star size={20} className="text-[#f3b942]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-50 mb-0.5">Rating</p>
+                    <p className="font-bold">4.8 (120)</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Lessons Sidebar */}
-          <div className="lg:col-span-1 order-2 lg:order-1">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-24">
-              <div className="p-6 border-b border-gray-50 bg-gray-50/50">
-                <h2 className="text-xl font-bold">Course Content</h2>
-
-                {/* Mobile Price/Enroll (only visible on mobile) */}
-                {!enrollment && (
-                  <div className="md:hidden mt-4 pt-4 border-t border-gray-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="font-bold text-gray-500">Price</span>
-                      <span className="text-2xl font-bold text-primary">{course.is_free ? t('common.free') : `$${course.price}`}</span>
+            {/* Price/Action Card */}
+            <div className="relative">
+              <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[2.5rem] p-10 text-center shadow-2xl">
+                {!enrollment ? (
+                  <>
+                    <p className="text-xs text-white/60 uppercase tracking-widest font-black mb-4">Course Access</p>
+                    <div className="flex flex-col items-center mb-10">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-5xl font-black text-white">
+                          {course.is_free ? t('common.free') : course.price}
+                        </span>
+                        {!course.is_free && (
+                          <span className="text-xl font-bold text-white/70">
+                            {isRTL ? 'د.ج' : 'DZD'}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <button
                       onClick={handleEnroll}
                       disabled={enrolling}
-                      className="w-full bg-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-primary-light transition shadow-lg shadow-primary/20"
+                      className="w-full bg-[#f3b942] text-[#340690] text-lg font-black px-8 py-5 rounded-[1.5rem] hover:bg-white hover:scale-105 transition-all shadow-xl shadow-black/20 mb-6 group/enroll"
                     >
-                      {enrolling ? 'Enrolling...' : t('common.enroll')}
+                      <span className="flex items-center justify-center gap-2">
+                        {enrolling ? (
+                          <div className="w-6 h-6 border-4 border-[#340690]/20 border-t-[#340690] rounded-full animate-spin"></div>
+                        ) : (
+                          <>
+                            {t('common.enroll')}
+                            <Play size={18} className="fill-current group-hover:scale-110 transition-transform" />
+                          </>
+                        )}
+                      </span>
                     </button>
+                    <p className="text-xs text-white/40 font-medium">Lifetime access & Certificate included</p>
+                  </>
+                ) : (
+                  <div className="text-center py-4">
+                    <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-8 text-white shadow-2xl shadow-green-500/20">
+                      <CheckCircle size={48} />
+                    </div>
+                    <h3 className="text-2xl font-black mb-2 text-white">Enrolled</h3>
+                    <p className="text-white/60 font-medium">Happy learning!</p>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
+          {/* Lessons Sidebar */}
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <div className="bg-white rounded-[2.5rem] shadow-xl border border-gray-100 overflow-hidden sticky top-24">
+              <div className="p-8 border-b border-gray-50 bg-gray-50/50">
+                <h2 className="text-xl font-black text-[#340690] uppercase tracking-widest">Course Menu</h2>
 
                 {enrollment && (
-                  <div className="mt-4">
-                    <div className="mb-2">
-                      <div className="flex justify-between text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
-                        <span>Progress</span>
-                        <span>{enrollment.progress_percentage}%</span>
-                      </div>
-                      <div className="w-full bg-gray-100 rounded-full h-2">
-                        <div
-                          className="bg-accent h-2 rounded-full transition-all duration-500 ease-out"
-                          style={{ width: `${enrollment.progress_percentage}%` }}
-                        ></div>
-                      </div>
+                  <div className="mt-8">
+                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-[#340690] mb-3">
+                      <span>Course Progress</span>
+                      <span>{enrollment.progress_percentage}%</span>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-[#340690] to-[#5f2cc7] h-full rounded-full transition-all duration-1000 ease-out"
+                        style={{ width: `${enrollment.progress_percentage}%` }}
+                      ></div>
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
-                {lessons.map((lesson, index) => {
-                  const isCompleted = completedLessons.has(lesson.id);
-                  const canAccess = canAccessLesson(lesson);
-                  const isSelected = selectedLesson?.id === lesson.id;
+              <div className="max-h-[600px] overflow-y-auto custom-scrollbar p-4">
+                <div className="space-y-2">
+                  {lessons.map((lesson, index) => {
+                    const isCompleted = completedLessons.has(lesson.id);
+                    const canAccess = canAccessLesson(lesson);
+                    const isSelected = selectedLesson?.id === lesson.id;
 
-                  return (
-                    <button
-                      key={lesson.id}
-                      onClick={() => canAccess && setSelectedLesson(lesson)}
-                      disabled={!canAccess}
-                      className={`w-full text-left p-4 transition-all border-b border-gray-50 last:border-0 hover:bg-gray-50 ${isSelected
-                          ? 'bg-primary/5 border-l-4 border-l-primary'
+                    return (
+                      <button
+                        key={lesson.id}
+                        onClick={() => canAccess && setSelectedLesson(lesson)}
+                        disabled={!canAccess}
+                        className={`w-full text-left p-5 rounded-[1.5rem] transition-all relative group/lesson ${isSelected
+                          ? 'bg-[#340690] text-white shadow-xl shadow-[#340690]/20'
                           : canAccess
-                            ? 'border-l-4 border-l-transparent'
-                            : 'bg-gray-50/50 opacity-60 cursor-not-allowed border-l-4 border-l-transparent'
-                        }`}
-                    >
-                      <div className="flex items-start">
-                        <div className="mt-1 flex-shrink-0 me-3">
-                          {isCompleted ? (
-                            <CheckCircle size={18} className="text-green-500" />
-                          ) : canAccess ? (
-                            isSelected ? <Play size={18} className="text-primary fill-primary" /> : <Play size={18} className="text-gray-400" />
-                          ) : (
-                            <Lock size={18} className="text-gray-300" />
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className={`text-sm font-medium truncate ${isSelected ? 'text-primary' : 'text-gray-700'}`}>
-                            {index + 1}. {isRTL ? lesson.title_ar : lesson.title_en}
-                          </p>
-                          <div className="flex items-center mt-1 space-x-2 rtl:space-x-reverse">
-                            <span className="text-xs text-gray-500">{lesson.duration_minutes} min</span>
-                            {lesson.is_preview && (
-                              <span className="text-[10px] font-bold bg-accent/20 text-accent-dark px-1.5 py-0.5 rounded leading-none">
-                                FREE
-                              </span>
+                            ? 'hover:bg-gray-50'
+                            : 'opacity-40 grayscale cursor-not-allowed'
+                          }`}
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className={`shrink-0 w-8 h-8 rounded-xl flex items-center justify-center ${isSelected ? 'bg-white/20' : 'bg-gray-100 group-hover/lesson:bg-[#340690]/10 transition-colors'}`}>
+                            {isCompleted ? (
+                              <CheckCircle size={14} className={isSelected ? 'text-white' : 'text-green-500'} />
+                            ) : canAccess ? (
+                              <Play size={14} className={isSelected ? 'text-[#f3b942] fill-[#f3b942]' : 'text-gray-400'} />
+                            ) : (
+                              <Lock size={14} className="text-gray-400" />
                             )}
                           </div>
+
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-sm font-black leading-snug mb-1 ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                              {isRTL ? lesson.title_ar : lesson.title_en}
+                            </p>
+                            <div className="flex items-center gap-3">
+                              <span className={`text-[10px] font-bold ${isSelected ? 'text-white/60' : 'text-gray-400'}`}>
+                                {lesson.duration_minutes} min
+                              </span>
+                              {lesson.is_preview && !enrollment && (
+                                <span className="text-[10px] font-black bg-[#f3b942] text-[#340690] px-2 py-0.5 rounded uppercase tracking-widest">
+                                  Free
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </button>
-                  );
-                })}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Video Player & Content */}
-          <div className="lg:col-span-2 order-1 lg:order-2">
+          {/* Video Player & Lesson Details */}
+          <div className="lg:col-span-3 order-1 lg:order-2">
             {selectedLesson ? (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                {/* Video Player */}
-                <div className="bg-black aspect-video flex items-center justify-center relative">
-                  {selectedLesson.video_url ? (
-                    <video
-                      controls
-                      className="w-full h-full"
-                      src={selectedLesson.video_url}
-                      controlsList="nodownload"
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div className="text-white text-center p-8">
-                      <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-                        <Play size={40} className="ml-1 opacity-80" />
+              <div className="space-y-12">
+                {/* Video Container */}
+                <div className="bg-black rounded-[3rem] shadow-2xl overflow-hidden border-[12px] border-white ring-1 ring-gray-100 relative group/player">
+                  <div className="aspect-video relative overflow-hidden bg-gray-900">
+                    {selectedLesson.video_url ? (
+                      <video
+                        controls
+                        className="w-full h-full object-cover"
+                        src={selectedLesson.video_url}
+                        controlsList="nodownload"
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center">
+                        <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-8 backdrop-blur-xl ring-1 ring-white/10 group-hover/player:scale-110 transition-transform duration-700">
+                          <Play size={40} className="text-[#f3b942] fill-[#f3b942] ml-1" />
+                        </div>
+                        <h3 className="text-2xl font-black text-white mb-4">Content Protected</h3>
+                        <p className="text-white/40 max-w-sm font-medium">This video content is being prepared and will be available very soon.</p>
                       </div>
-                      <p className="text-lg font-medium opacity-80">Video content coming soon</p>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
 
-                {/* Lesson Info */}
-                <div className="p-8">
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <h2 className="text-2xl font-bold mb-2 text-gray-900">
-                        {isRTL ? selectedLesson.title_ar : selectedLesson.title_en}
-                      </h2>
-                      <p className="text-gray-500">Lesson {selectedLesson.order_index + 1} of {lessons.length}</p>
-                    </div>
-                    <button className="text-gray-400 hover:text-primary transition p-2 rounded-full hover:bg-gray-50">
-                      <Share2 size={20} />
-                    </button>
-                  </div>
+                {/* Lesson Details */}
+                <div className="bg-white rounded-[3.5rem] shadow-xl border border-gray-100 p-12 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#340690]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
-                  <div className="prose max-w-none text-gray-600 mb-8 leading-relaxed">
-                    <p>{isRTL ? selectedLesson.description_ar : selectedLesson.description_en}</p>
-                  </div>
+                  <div className="relative z-10">
+                    <div className="flex flex-wrap items-center justify-between gap-6 mb-10">
+                      <div>
+                        <div className="flex items-center gap-3 mb-4">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-[#f3b942] bg-[#f3b942]/10 px-3 py-1.5 rounded-full">
+                            Module {selectedLesson.order_index + 1}
+                          </span>
+                        </div>
+                        <h2 className="text-3xl md:text-4xl font-black text-[#340690]">
+                          {isRTL ? selectedLesson.title_ar : selectedLesson.title_en}
+                        </h2>
+                      </div>
 
-                  {enrollment && !completedLessons.has(selectedLesson.id) && (
-                    <div className="flex justify-end">
-                      <button
-                        onClick={() => markLessonComplete(selectedLesson.id)}
-                        className="flex items-center bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary-light transition shadow-lg shadow-primary/20 font-medium"
-                      >
-                        <CheckCircle size={18} className="me-2" />
-                        Mark as Complete
+                      <button className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-[#340690] hover:bg-[#340690]/10 transition-all group/share">
+                        <Share2 size={24} className="group-hover:scale-110 transition-transform" />
                       </button>
                     </div>
-                  )}
 
-                  {completedLessons.has(selectedLesson.id) && (
-                    <div className="flex justify-end">
-                      <div className="flex items-center text-green-600 bg-green-50 px-4 py-2 rounded-lg">
-                        <CheckCircle size={20} className="me-2" />
-                        <span className="font-bold">Completed</span>
-                      </div>
+                    <div className="prose max-w-none mb-12">
+                      <p className="text-xl text-gray-600 leading-relaxed font-arabic">
+                        {isRTL ? selectedLesson.description_ar : selectedLesson.description_en}
+                      </p>
                     </div>
-                  )}
+
+                    {enrollment && (
+                      <div className="pt-10 border-t border-gray-50 flex flex-wrap items-center justify-between gap-6">
+                        <div className="flex items-center gap-4">
+                          <div className={`w-3 h-3 rounded-full ${completedLessons.has(selectedLesson.id) ? 'bg-green-500' : 'bg-gray-200'}`}></div>
+                          <span className="text-sm font-black text-gray-400 uppercase tracking-widest">
+                            {completedLessons.has(selectedLesson.id) ? 'Lesson Completed' : 'Status: In Progress'}
+                          </span>
+                        </div>
+
+                        {!completedLessons.has(selectedLesson.id) ? (
+                          <button
+                            onClick={() => markLessonComplete(selectedLesson.id)}
+                            className="flex items-center gap-3 bg-[#340690] text-white px-10 py-5 rounded-[1.5rem] hover:bg-[#5f2cc7] transition-all shadow-xl shadow-[#340690]/20 font-black text-lg group/complete"
+                          >
+                            <CheckCircle size={22} className="group-hover:scale-110 transition-transform" />
+                            {isRTL ? 'إكمال الدرس' : 'Mark as Complete'}
+                          </button>
+                        ) : (
+                          <div className="flex items-center gap-3 bg-green-50 text-green-600 px-8 py-5 rounded-[1.5rem] font-black text-lg border-2 border-green-100">
+                            <CheckCircle size={22} />
+                            <span>{isRTL ? 'تم الإكمال' : 'Completed'}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-sm p-16 text-center border border-gray-100">
-                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <BookOpen size={40} className="text-gray-300" />
+              <div className="bg-white rounded-[3.5rem] shadow-xl p-24 text-center border border-gray-50 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white opacity-50"></div>
+                <div className="relative z-10">
+                  <div className="w-32 h-32 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-sm ring-1 ring-gray-100">
+                    <BookOpen size={48} className="text-gray-300" />
+                  </div>
+                  <h3 className="text-3xl font-black text-[#340690] mb-4">Start Your Learning Journey</h3>
+                  <p className="text-xl text-gray-400 max-w-sm mx-auto font-medium">Select a lesson from the menu on the left to begin watching the content.</p>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Start Learning</h3>
-                <p className="text-gray-500">Select a lesson from the sidebar to begin watching.</p>
               </div>
             )}
           </div>

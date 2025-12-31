@@ -1,17 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Almarai:wght@300;400;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --radius: 0.75rem; /* softer, friendlier corners */
+    --radius: 0.75rem;
+    /* softer, friendlier corners */
     --background: 0 0% 100%;
-    --foreground: 260 20% 10%; /* Very dark purple-gray for better readability/harmony than pure black */
+    --foreground: 260 20% 10%;
+    /* Very dark purple-gray for better readability/harmony than pure black */
     --border: 260 10% 90%;
     --input: 260 10% 90%;
-    --ring: 258 88% 26%; /* #340690 */
+    --ring: 258 88% 26%;
+    /* #340690 */
   }
 
   * {
@@ -20,8 +21,20 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-weight: 400;
+    /* Regular for body text */
     /* Smooth scrolling for a "calm" feel */
     scroll-behavior: smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold;
+    /* SemiBold/Bold for Headings */
   }
 
   /* Force Almarai for RTL specifically */
@@ -35,7 +48,7 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .shadow-soft {
     box-shadow: 0 4px 20px -2px rgba(52, 6, 144, 0.1);
   }

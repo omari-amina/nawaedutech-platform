@@ -42,22 +42,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName: string, role: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) throw error;
+    console.log('Attempting signup for:', email);
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    // Create profile
-    if (data.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: data.user.id,
-          full_name: fullName,
-          role: role,
-        });
-      if (profileError) throw profileError;
+      if (error) {
+        console.error('Supabase Auth Error:', error);
+        throw error;
+      }
+
+      console.log('Auth signup successful, creating profile...');
+
+      // Create profile
+      if (data.user) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            full_name: fullName,
+            role: role,
+          });
+        if (profileError) {
+          console.error('Profile creation error:', profileError);
+          throw profileError;
+        }
+      }
+      console.log('Signup and Profile creation complete!');
+    } catch (err: any) {
+      console.error('SignUp catch block:', err);
+      throw err;
     }
   };
 

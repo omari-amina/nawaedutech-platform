@@ -35,139 +35,158 @@ export function ContactPage() {
     };
 
     return (
-        <div className="min-h-screen py-16 bg-muted/30">
-            <div className="container mx-auto px-4">
+        <div className="min-h-screen bg-white font-sans">
+            {/* 1. HERO SECTION */}
+            <section className="relative py-24 px-4 text-center overflow-hidden bg-gradient-to-br from-[#340690] via-[#5f2cc7] to-[#864bf5] mb-20">
+                {/* Decorative Elements */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#f3b942]/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
 
-                <div className="text-center mb-16 px-4">
-                    <span className="text-accent font-bold tracking-wider uppercase text-sm mb-2 block">{t('nav.contact') || 'Contact Us'}</span>
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                        {t('contact.title') || 'Get in Touch'}
+                <div className="container mx-auto relative z-10 py-10">
+                    <h1 className="text-4xl sm:text-6xl font-black text-white mb-6 leading-tight">
+                        {t('contact.title') || 'تواصل معنا'}
                     </h1>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                        {t('contact.subtitle') || 'We are here to help and answer any question you might have.'}
+                    <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed font-medium">
+                        {t('contact.subtitle') || 'نحن هنا للإجابة على جميع استفساراتك ومساعدتك في رحلتك التعليمية.'}
                     </p>
                 </div>
+            </section>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            <div className="container mx-auto px-4 pb-32">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 max-w-7xl mx-auto items-start">
 
-                    {/* Contact Info */}
+                    {/* Left Side: Contact Info */}
                     <div className="space-y-8">
-                        <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                            <div className="flex items-start">
-                                <div className="bg-primary/10 p-3 rounded-2xl me-6 group-hover:bg-primary group-hover:text-white transition-colors">
-                                    <Mail size={28} className="text-primary group-hover:text-white" />
+                        <div className="group bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+                            {/* Decorative Background Icon */}
+                            <div className="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <Mail size={160} />
+                            </div>
+
+                            <div className="flex items-center gap-8 relative z-10">
+                                <div className="bg-[#340690]/10 w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 group-hover:bg-[#340690] transition-all duration-500 group-hover:scale-110">
+                                    <Mail size={32} className="text-[#340690] group-hover:text-white transition-colors" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{t('contact.email') || 'Email Us'}</h3>
-                                    <p className="text-gray-600 mb-1">Our friendly team is here to help.</p>
-                                    <a href="mailto:contact@nawaedutech.com" className="text-lg font-semibold text-primary hover:underline">contact@nawaedutech.com</a>
+                                    <h3 className="text-2xl font-black text-[#340690] mb-2 font-arabic">{t('contact.email') || 'البريد الإلكتروني'}</h3>
+                                    <a href="mailto:contact@nawaedutech.com" className="text-xl font-bold text-gray-600 hover:text-[#5f2cc7] transition-colors lowercase block">contact@nawaedutech.com</a>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                            <div className="flex items-start">
-                                <div className="bg-secondary/10 p-3 rounded-2xl me-6 group-hover:bg-secondary group-hover:text-white transition-colors">
-                                    <Phone size={28} className="text-secondary group-hover:text-white" />
+                        <div className="group bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+                            <div className="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <Phone size={160} />
+                            </div>
+
+                            <div className="flex items-center gap-8 relative z-10">
+                                <div className="bg-[#f3b942]/10 w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 group-hover:bg-[#f3b942] transition-all duration-500 group-hover:scale-110">
+                                    <Phone size={32} className="text-[#f3b942] group-hover:text-[#340690] transition-colors" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{t('contact.phone') || 'Call Us'}</h3>
-                                    <p className="text-gray-600 mb-1">Mon-Fri from 8am to 5pm.</p>
-                                    <a href="tel:+213123456789" className="text-lg font-semibold text-primary hover:underline" dir="ltr">+213 123 456 789</a>
+                                    <h3 className="text-2xl font-black text-[#340690] mb-2 font-arabic">{t('contact.phone') || 'رقم الهاتف'}</h3>
+                                    <a href="tel:+213123456789" className="text-xl font-bold text-gray-600 tracking-wider block" dir="ltr">+213 123 456 789</a>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition-all">
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                            <div className="flex items-start">
-                                <div className="bg-accent/20 p-3 rounded-2xl me-6 group-hover:bg-accent group-hover:text-primary-foreground transition-colors">
-                                    <MapPin size={28} className="text-accent-foreground group-hover:text-primary-foreground" />
+                        <div className="group bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
+                            <div className="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <MapPin size={160} />
+                            </div>
+
+                            <div className="flex items-center gap-8 relative z-10">
+                                <div className="bg-[#5f2cc7]/10 w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 group-hover:bg-[#5f2cc7] transition-all duration-500 group-hover:scale-110">
+                                    <MapPin size={32} className="text-[#5f2cc7] group-hover:text-white transition-colors" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{t('contact.office') || 'Visit Us'}</h3>
-                                    <p className="text-gray-600 mb-1">Come say hello at our office headquarters.</p>
-                                    <p className="text-lg font-semibold text-gray-900">Algiers, Algeria</p>
+                                    <h3 className="text-2xl font-black text-[#340690] mb-2 font-arabic">{t('contact.office') || 'الموقع'}</h3>
+                                    <p className="text-xl font-bold text-gray-600 block">الجزائر العاصمة، الجزائر</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="bg-gradient-to-br from-primary to-secondary rounded-3xl p-8 text-white relative overflow-hidden shadow-xl">
-                            <div className="absolute bottom-0 right-0 opacity-10 transform translate-x-1/4 translate-y-1/4">
-                                <MessageSquare size={200} />
+                        {/* FAQ CTA Card */}
+                        <div className="bg-[#340690] rounded-[3rem] p-12 text-white relative overflow-hidden shadow-2xl shadow-[#340690]/30 mt-12 group/faq">
+                            <div className="absolute -bottom-20 -right-20 opacity-10 group-hover/faq:scale-110 transition-transform duration-700">
+                                <MessageSquare size={300} strokeWidth={1} />
                             </div>
-                            <h3 className="text-2xl font-bold mb-4">{t('contact.faqTitle') || 'Have questions?'}</h3>
-                            <p className="text-blue-100 mb-6 relative z-10">Check out our FAQ section for quick answers to common questions about our platform and courses.</p>
-                            <button className="bg-white text-primary px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition shadow-lg relative z-10">
-                                {t('contact.faqButton') || 'Visit FAQ'}
+                            <h3 className="text-3xl font-black mb-6 relative z-10 font-arabic">{t('contact.faqTitle') || 'هل لديك أسئلة؟'}</h3>
+                            <p className="text-xl text-white/80 mb-10 relative z-10 leading-relaxed font-medium">نحن نوفر لك قسماً خاصاً بالأسئلة الشائعة لتجد إجابات سريعة حول منصتنا ومنتجاتنا.</p>
+                            <button className="bg-[#f3b942] text-[#340690] px-10 py-5 rounded-2xl font-black text-lg hover:scale-105 transition-all shadow-xl shadow-black/20 relative z-10">
+                                {t('contact.faqButton') || 'زيارة الأسئلة الشائعة'}
                             </button>
                         </div>
                     </div>
 
-                    {/* Contact Form */}
-                    <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 md:p-10 relative">
-                        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-secondary to-accent"></div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('contact.formTitle') || 'Send us a message'}</h2>
+                    {/* Right Side: Contact Form */}
+                    <div className="bg-white rounded-[3.5rem] shadow-2xl border border-gray-50 p-12 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-[#340690] via-[#5f2cc7] to-[#f3b942]"></div>
 
-                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="mb-12">
+                            <h2 className="text-3xl font-black text-[#340690] mb-4 font-arabic">{t('contact.formTitle') || 'أرسل لنا رسالة'}</h2>
+                            <p className="text-gray-500 font-medium">سوف نرد عليك في أقرب وقت ممكن.</p>
+                        </div>
+
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">{t('contact.name') || 'Name'}</label>
+                                    <label className="block text-sm font-black text-[#340690] uppercase tracking-widest mb-3 font-sans opacity-70">{t('contact.name') || 'الاسم الكامل'}</label>
                                     <input
                                         {...register('name')}
                                         type="text"
-                                        className={`w-full px-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.name ? 'border-red-500' : 'border-gray-200 focus:border-primary'}`}
-                                        placeholder="Your name"
+                                        className={`w-full px-8 py-5 bg-muted/20 border-2 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#340690]/5 transition-all text-lg font-bold placeholder:font-medium ${errors.name ? 'border-red-500' : 'border-transparent focus:border-[#340690]'}`}
+                                        placeholder={isRTL ? 'مثال: محمد علي' : 'e.g. John Doe'}
                                     />
-                                    {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+                                    {errors.name && <p className="text-red-500 text-sm mt-3 font-bold px-2">{errors.name.message}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">{t('contact.emailLabel') || 'Email'}</label>
+                                    <label className="block text-sm font-black text-[#340690] uppercase tracking-widest mb-3 font-sans opacity-70">{t('contact.emailLabel') || 'البريد الإلكتروني'}</label>
                                     <input
                                         {...register('email')}
                                         type="email"
-                                        className={`w-full px-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.email ? 'border-red-500' : 'border-gray-200 focus:border-primary'}`}
-                                        placeholder="you@example.com"
+                                        className={`w-full px-8 py-5 bg-muted/20 border-2 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#340690]/5 transition-all text-lg font-bold placeholder:font-medium ${errors.email ? 'border-red-500' : 'border-transparent focus:border-[#340690]'}`}
+                                        placeholder="email@example.com"
                                     />
-                                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+                                    {errors.email && <p className="text-red-500 text-sm mt-3 font-bold px-2">{errors.email.message}</p>}
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">{t('contact.subject') || 'Subject'}</label>
+                                <label className="block text-sm font-black text-[#340690] uppercase tracking-widest mb-3 font-sans opacity-70">{t('contact.subject') || 'الموضوع'}</label>
                                 <input
                                     {...register('subject')}
                                     type="text"
-                                    className={`w-full px-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all ${errors.subject ? 'border-red-500' : 'border-gray-200 focus:border-primary'}`}
-                                    placeholder="How can we help?"
+                                    className={`w-full px-8 py-5 bg-muted/20 border-2 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#340690]/5 transition-all text-lg font-bold placeholder:font-medium ${errors.subject ? 'border-red-500' : 'border-transparent focus:border-[#340690]'}`}
+                                    placeholder={isRTL ? 'بخصوص ماذا تتواصل معنا؟' : 'How can we help?'}
                                 />
-                                {errors.subject && <p className="text-red-500 text-xs mt-1">{errors.subject.message}</p>}
+                                {errors.subject && <p className="text-red-500 text-sm mt-3 font-bold px-2">{errors.subject.message}</p>}
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-2">{t('contact.message') || 'Message'}</label>
+                                <label className="block text-sm font-black text-[#340690] uppercase tracking-widest mb-3 font-sans opacity-70">{t('contact.message') || 'الرسالة'}</label>
                                 <textarea
                                     {...register('message')}
                                     rows={5}
-                                    className={`w-full px-4 py-3 bg-gray-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none ${errors.message ? 'border-red-500' : 'border-gray-200 focus:border-primary'}`}
-                                    placeholder="Tell us more..."
+                                    className={`w-full px-8 py-5 bg-muted/20 border-2 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#340690]/5 transition-all text-lg font-bold placeholder:font-medium resize-none ${errors.message ? 'border-red-500' : 'border-transparent focus:border-[#340690]'}`}
+                                    placeholder={isRTL ? 'اكتب رسالتك بالتفصيل هنا...' : 'Write your message details here...'}
                                 />
-                                {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
+                                {errors.message && <p className="text-red-500 text-sm mt-3 font-bold px-2">{errors.message.message}</p>}
                             </div>
 
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full bg-primary text-white py-4 rounded-xl font-bold hover:bg-primary-light transition-all shadow-lg shadow-primary/25 flex items-center justify-center disabled:opacity-70"
+                                className="w-full bg-[#340690] text-white py-6 rounded-[1.5rem] font-black text-xl hover:bg-[#5f2cc7] transition-all shadow-2xl shadow-[#340690]/20 flex items-center justify-center disabled:opacity-70 group overflow-hidden relative"
                             >
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
                                 {isSubmitting ? (
-                                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                    <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
                                 ) : (
                                     <>
-                                        <Send className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                                        {t('contact.send') || 'Send Message'}
+                                        <Send className={`w-6 h-6 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform ${isRTL ? 'ml-3' : 'mr-3'}`} />
+                                        <span className="relative z-10 font-arabic">{t('contact.send') || 'إرسال الرسالة'}</span>
                                     </>
                                 )}
                             </button>

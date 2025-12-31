@@ -24,20 +24,17 @@ export function Header() {
   return (
     <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-28">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse group">
             <div className="relative">
-              <div className="absolute inset-0 bg-accent blur-lg opacity-20 group-hover:opacity-40 transition-opacity"></div>
+              <div className="absolute inset-0 bg-accent blur-lg opacity-0 group-hover:opacity-20 transition-opacity"></div>
               <img
-                src="/logo-icon.png"
+                src="/logo-nawa.png"
                 alt="NawaEduTech Logo"
-                className="h-10 w-10 object-contain relative z-10"
+                className="h-24 w-auto object-contain relative z-10"
               />
             </div>
-            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              Nawa
-            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -51,15 +48,6 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
-            {/* Language Toggle */}
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center px-3 py-1.5 rounded-full bg-gray-50 hover:bg-accent/20 text-gray-700 hover:text-accent border border-gray-200 hover:border-accent/30 transition-all duration-300"
-            >
-              <Globe size={16} className="mr-1.5 rtl:ml-1.5 rtl:mr-0" />
-              <span className="text-xs font-bold uppercase tracking-wider">{language === 'en' ? 'العربية' : 'EN'}</span>
-            </button>
-
             {/* Cart */}
             <Link
               to="/cart"
