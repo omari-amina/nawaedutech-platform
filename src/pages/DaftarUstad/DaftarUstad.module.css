@@ -1,0 +1,363 @@
+/* DaftarUstad.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+
+.container {
+    font-family: 'Cairo', sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+    line-height: 1.6;
+    overflow-x: hidden;
+    direction: rtl;
+    min-height: 100vh;
+}
+
+.wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 0;
+}
+
+.navContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #1e293b;
+    text-decoration: none;
+}
+
+.logo span {
+    color: #3b82f6;
+}
+
+.navLinks {
+    display: flex;
+    gap: 2rem;
+}
+
+.navLinks a {
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.navLinks a:hover {
+    color: #3b82f6;
+}
+
+.btnCta {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.btnCta:hover {
+    background-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* Hero */
+.hero {
+    padding-top: 160px;
+    padding-bottom: 80px;
+    background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.hero h1 span {
+    color: #3b82f6;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    color: #475569;
+    max-width: 800px;
+    margin: 0 auto 2.5rem;
+}
+
+.heroImage {
+    max-width: 900px;
+    margin: 4rem auto 0;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    border: 8px solid white;
+}
+
+/* Sections */
+.section {
+    padding: 100px 0;
+}
+
+.sectionTitle {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 4rem;
+    color: #0f172a;
+}
+
+/* Features */
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+}
+
+.featureCard {
+    background: white;
+    padding: 3rem;
+    border-radius: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    border: 1px solid #f1f5f9;
+}
+
+.featureCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.featureIcon {
+    font-size: 2.5rem;
+    color: #3b82f6;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.featureCard h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1e293b;
+}
+
+.featureCard p {
+    color: #64748b;
+}
+
+/* Analysis Showcase */
+.analysisSection {
+    background-color: #0f172a;
+    color: white;
+}
+
+.analysisSection .sectionTitle {
+    color: white;
+}
+
+.analysisGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.analysisContent h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.analysisContent ul {
+    list-style: none;
+    padding: 0;
+}
+
+.analysisContent li {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.analysisContent li i {
+    color: #10b981;
+}
+
+/* Pricing */
+.pricingCard {
+    background: white;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 32px;
+    padding: 4rem;
+    text-align: center;
+    border: 2px solid #3b82f6;
+    position: relative;
+}
+
+.priceBadge {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3b82f6;
+    color: white;
+    padding: 0.5rem 2rem;
+    border-radius: 50px;
+    font-weight: 800;
+}
+
+.priceAmount {
+    font-size: 4rem;
+    font-weight: 900;
+    color: #0f172a;
+}
+
+.priceAmount span {
+    font-size: 1.5rem;
+    color: #64748b;
+}
+
+.pricingList {
+    text-align: right;
+    margin: 3rem 0;
+    list-style: none;
+}
+
+.pricingList li {
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #475569;
+}
+
+.pricingList li i {
+    color: #3b82f6;
+}
+
+/* CTA Button Large */
+.btnPrimaryLg {
+    display: block;
+    width: 100%;
+    background: #3b82f6;
+    color: white;
+    padding: 1.2rem;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btnPrimaryLg:hover {
+    background: #2563eb;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.5);
+}
+
+/* FAQ */
+.faqItem {
+    background: white;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.faqQuestion {
+    padding: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+}
+
+.faqAnswer {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.3s;
+    color: #64748b;
+}
+
+.faqActive .faqAnswer {
+    padding-bottom: 1.5rem;
+    max-height: 200px;
+}
+
+/* Footer */
+.footer {
+    padding: 80px 0;
+    background: #f1f5f9;
+    text-align: center;
+}
+
+@media (max-width: 992px) {
+    .analysisGrid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .analysisContent ul {
+        display: inline-block;
+        text-align: right;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* New CSS Classes for clean code */
+.heroBtnLarge {
+    padding: 1.2rem 3rem !important;
+    font-size: 1.2rem !important;
+}
+
+.analysisSub {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.analysisImg {
+    width: 100%;
+    border-radius: 20px;
+}
+
+.pricingSubNote {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.faqWrapper {
+    max-width: 800px;
+}
+
+.heroContent {
+    max-width: 800px;
+    margin: 0 auto;
+}

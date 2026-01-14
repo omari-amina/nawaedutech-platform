@@ -219,31 +219,39 @@ export function HomePage() {
               </div>
             </div>
 
-            {/* Card 2 */}
-            <div className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden">
-              <div className="relative w-full h-56 bg-gradient-to-br from-[#5f2cc7] to-[#864bf5] flex items-center justify-center overflow-hidden">
+            {/* Card 2 - CostCrafter Pro */}
+            <Link to="/cost-crafter" className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden">
+              <div className="relative w-full h-56 bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#f3b942]/20 rounded-full blur-3xl"></div>
-                <Layers className="w-20 h-20 text-white/30 group-hover:text-white/50 group-hover:scale-110 transition-all duration-500" strokeWidth={1.5} />
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+                <Sparkles className="w-20 h-20 text-white/30 group-hover:text-white/50 group-hover:scale-110 transition-all duration-500" strokeWidth={1.5} />
               </div>
               <div className="p-8">
-                <h3 className="text-2xl font-extrabold text-gray-900 mb-3 group-hover:text-[#340690] transition-colors">مفكرة ذكية للطالب</h3>
-                <p className="text-gray-600 leading-relaxed text-lg">تنظم وقتك وتزيد إنتاجيتك</p>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded">للحرفيين</span>
+                  <span className="text-[#10b981] font-bold">3000 دج</span>
+                </div>
+                <h3 className="text-2xl font-extrabold text-gray-900 mb-3 group-hover:text-[#10b981] transition-colors">برنامج CostCrafter Pro</h3>
+                <p className="text-gray-600 leading-relaxed text-lg">احسبي تكلفة منتجاتك اليدوية والطباعة بدقة واضمني أرباحك.</p>
               </div>
-            </div>
+            </Link>
 
-            {/* Card 3 */}
-            <div className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden">
-              <div className="relative w-full h-56 bg-gradient-to-br from-[#f3b942] to-[#340690] flex items-center justify-center overflow-hidden">
+            {/* Card 3 - Daftar Ustad Digital */}
+            <Link to="/daftar-ustad" className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden">
+              <div className="relative w-full h-56 bg-gradient-to-br from-[#3b82f6] to-[#2563eb] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
                 <div className="absolute top-4 left-4 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
-                <Heart className="w-20 h-20 text-white/30 group-hover:text-white/50 group-hover:scale-110 transition-all duration-500" strokeWidth={1.5} />
+                <GraduationCap className="w-20 h-20 text-white/30 group-hover:text-white/50 group-hover:scale-110 transition-all duration-500" strokeWidth={1.5} />
               </div>
               <div className="p-8">
-                <h3 className="text-2xl font-extrabold text-gray-900 mb-3 group-hover:text-[#340690] transition-colors">دليل تحضير الدروس</h3>
-                <p className="text-gray-600 leading-relaxed text-lg">يساعدك على تخطيط دروسك بفعالية</p>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded">للأساتذة</span>
+                  <span className="text-[#3b82f6] font-bold">2500 دج</span>
+                </div>
+                <h3 className="text-2xl font-extrabold text-gray-900 mb-3 group-hover:text-[#3b82f6] transition-colors">دفتر الأستاذ الرقمي</h3>
+                <p className="text-gray-600 leading-relaxed text-lg">إدارة الأقسام، حساب المعدلات آلياً، وتحليل النتائج بضغطة زر.</p>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>

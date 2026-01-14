@@ -60,7 +60,7 @@ const CostCrafterLanding = () => {
                             </video>
                         </div>
                     </div>
-                    <div style={{ marginTop: '10px', fontSize: '0.9rem', color: '#fff', opacity: 0.7 }}>
+                    <div className={styles.heroFooter}>
                         <i className="fa-solid fa-shield-halved"></i> صُنع في الجزائر 🇩🇿
                     </div>
                 </div>
@@ -130,7 +130,7 @@ const CostCrafterLanding = () => {
             </section>
 
             {/* How it Works */}
-            <section id="how-it-works" className={styles.section} style={{ background: 'rgba(255,255,255,0.02)' }}>
+            <section id="how-it-works" className={`${styles.section} ${styles.howItWorksBg}`}>
                 <div className={styles.wrapper}>
                     <h2 className={styles.sectionTitle}><span>ابدئي العمل في 3 خطوات بسيطة</span> 🚀</h2>
                     <div className={styles.stepsContainer}>
@@ -161,7 +161,7 @@ const CostCrafterLanding = () => {
                     <div className={styles.pricingCard}>
                         <div className={styles.badge}>الأكثر مبيعاً 🔥</div>
                         <h3>النسخة الاحترافية</h3>
-                        <p style={{ color: '#94a3b8' }}>Lifetime License</p>
+                        <p className={styles.pricingSub}>Lifetime License</p>
 
                         <div className={styles.priceOld}>5000 DZD</div>
                         <div className={styles.priceNew}>3000<span>دج</span></div>
@@ -173,27 +173,26 @@ const CostCrafterLanding = () => {
                             <li><i className={`fa-solid fa-check ${styles.checkIcon}`}></i> دعم فني عبر تيليجرام</li>
                         </ul>
 
-                        <hr style={{ borderColor: 'rgba(255,255,255,0.1)', margin: '20px 0' }} />
+                        <hr className={styles.pricingDivider} />
 
-                        <p style={{ marginBottom: '10px', color: '#e2e8f0' }}>طرق الدفع المتاحة:</p>
+                        <p className={styles.paymentTitle}>طرق الدفع المتاحة:</p>
                         <div className={styles.paymentIcons}>
                             <span className={styles.paymentBadge}>CCP</span>
                             <span className={styles.paymentBadge}>BaridiMob</span>
                         </div>
 
-                        <a href="https://tally.so/r/placeholder" target="_blank" rel="noreferrer" className={styles.btnPrimaryLg} style={{ width: '100%', justifyContent: 'center', marginTop: '20px' }}>
+                        <a href="https://tally.so/r/placeholder" target="_blank" rel="noopener noreferrer" className={`${styles.btnPrimaryLg} ${styles.btnFullWidth}`}>
                             اطلبي نسختك الآن
                         </a>
-                        <p style={{ fontSize: '0.8rem', marginTop: '10px', color: '#94a3b8' }}>
+                        <p className={styles.guaranteeNote}>
                             <i className="fa-solid fa-shield"></i> ضمان استعادة الاموال (مشروط)
                         </p>
                     </div>
                 </div>
             </section>
 
-            {/* FAQ */}
             <section className={styles.section}>
-                <div className={styles.wrapper} style={{ maxWidth: '800px' }}>
+                <div className={`${styles.wrapper} ${styles.faqWrapper}`}>
                     <h2 className={styles.sectionTitle}><span>الأسئلة الشائعة</span> ❓</h2>
 
                     {[
@@ -226,16 +225,15 @@ const CostCrafterLanding = () => {
                 </div>
             </section>
 
-            {/* Footer */}
             <footer id="contact" className={styles.footer}>
                 <div className={styles.wrapper}>
-                    <h2 className={styles.logo} style={{ marginBottom: '20px' }}>Nawa<span>EduTech</span></h2>
+                    <h2 className={`${styles.logo} ${styles.footerLogo}`}>Nawa<span>EduTech</span></h2>
                     <div className={styles.socials}>
-                        <a href="#"><i className="fa-brands fa-facebook-f"></i></a>
-                        <a href="#"><i className="fa-brands fa-instagram"></i></a>
-                        <a href="#"><i className="fa-brands fa-telegram"></i></a>
+                        <a href="#" title="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" title="Instagram"><i className="fa-brands fa-instagram"></i></a>
+                        <a href="#" title="Telegram"><i className="fa-brands fa-telegram"></i></a>
                     </div>
-                    <p style={{ marginTop: '20px', color: '#94a3b8', fontSize: '0.9rem' }}>
+                    <p className={styles.footerNote}>
                         © 2026 NawaEduTech. جميع الحقوق محفوظة. <br />
                         صُمم بكل حب لدعم المشاريع الجزائرية 🇩🇿
                     </p>
@@ -243,7 +241,7 @@ const CostCrafterLanding = () => {
             </footer>
 
             {/* Floating Telegram Button */}
-            <a href="https://t.me/placeholder" className={styles.floatingBtn} target="_blank" rel="noreferrer">
+            <a href="https://t.me/placeholder" className={styles.floatingBtn} target="_blank" rel="noopener noreferrer" title="Contact us on Telegram">
                 <i className="fa-brands fa-telegram"></i>
             </a>
         </div>
