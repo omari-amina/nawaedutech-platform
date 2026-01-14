@@ -1,0 +1,385 @@
+/* CostCrafter.module.css */
+
+/* Fonts import should be in your main _document.tsx or globals.css, but here for ref */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+
+.container {
+    font-family: 'Cairo', sans-serif;
+    background-color: #0a192f;
+    color: #e2e8f0;
+    line-height: 1.6;
+    overflow-x: hidden;
+    direction: rtl;
+    min-height: 100vh;
+}
+
+.wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGold {
+    0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(251, 191, 36, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+}
+
+.reveal {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(10, 25, 47, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 1rem 0;
+}
+
+.navContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #e2e8f0;
+    text-decoration: none;
+}
+.logo span { color: #fbbf24; }
+
+.navLinks {
+    display: flex;
+    gap: 2rem;
+}
+
+.navLinks a {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.navLinks a:hover { color: #fbbf24; }
+
+.btnCta {
+    background-color: #fbbf24;
+    color: #0a192f;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+    transition: transform 0.2s;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+.btnCta:hover {
+    transform: translateY(-2px);
+    background-color: #d97706;
+}
+
+/* Hero */
+.hero {
+    padding-top: 140px;
+    padding-bottom: 80px;
+    text-align: center;
+    background: radial-gradient(circle at center, #172a45 0%, #0a192f 70%);
+}
+
+.hero h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+.hero h1 span { color: #fbbf24; }
+
+.hero p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    max-width: 700px;
+    margin: 0 auto 2.5rem;
+}
+
+.videoContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 3rem auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
+    background: #000;
+}
+
+.videoWrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+}
+
+.videoWrapper video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.heroBtns {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.btnPrimaryLg {
+    background: #fbbf24;
+    color: #0a192f;
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    animation: pulseGold 2s infinite;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btnSecondaryLg {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.2);
+    color: #e2e8f0;
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btnSecondaryLg:hover { border-color: #fbbf24; color: #fbbf24; }
+
+/* Sections General */
+.section { padding: 80px 0; }
+
+.sectionTitle {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+    font-weight: 800;
+    color: #fff;
+}
+.sectionTitle span { border-bottom: 4px solid #fbbf24; padding-bottom: 5px; }
+
+/* Pain Points */
+.painGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.painCard {
+    background: rgba(255,255,255,0.03);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    transition: 0.3s;
+}
+.painCard:hover { transform: translateY(-5px); background: rgba(239, 68, 68, 0.05); }
+.painIcon { font-size: 2rem; color: #ef4444; margin-bottom: 1rem; }
+.painCard h3 { margin-bottom: 0.5rem; font-size: 1.2rem; color: #fff; }
+.painCard p { color: #94a3b8; font-size: 0.95rem; }
+
+/* Features */
+.featuresGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.featureCard {
+    background: #112240;
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+}
+.featureCard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+    background: #fbbf24;
+}
+.featureIcon {
+    display: inline-block;
+    width: 60px; height: 60px;
+    line-height: 60px;
+    text-align: center;
+    background: rgba(251, 191, 36, 0.1);
+    color: #fbbf24;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.featureCard h3 { margin-bottom: 1rem; font-size: 1.3rem; color: #fff; }
+
+/* Steps */
+.stepsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+.stepItem {
+    flex: 1;
+    min-width: 250px;
+    background: #112240;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+}
+.stepNum {
+    width: 40px; height: 40px;
+    background: #fbbf24;
+    color: #0a192f;
+    font-weight: bold;
+    border-radius: 50%;
+    line-height: 40px;
+    margin: 0 auto 1rem;
+    font-size: 1.2rem;
+}
+
+/* Pricing */
+.pricingCard {
+    background: linear-gradient(145deg, #112240, #0d1b33);
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    border: 2px solid #fbbf24;
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.1);
+    position: relative;
+}
+.badge {
+    position: absolute;
+    top: -15px; right: 50%;
+    transform: translateX(50%);
+    background: #fbbf24;
+    color: #0a192f;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+.priceOld { text-decoration: line-through; color: #94a3b8; font-size: 1.2rem; }
+.priceNew { font-size: 3.5rem; font-weight: 900; color: #fff; margin: 10px 0; }
+.priceNew span { font-size: 1.2rem; color: #fbbf24; }
+.featuresList { text-align: right; margin: 2rem 0; list-style: none; }
+.featuresList li { margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; color: #e2e8f0; }
+.checkIcon { color: #10b981; }
+
+.paymentIcons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.paymentBadge {
+    font-weight: bold; background: white; color: #333; padding: 5px 10px; border-radius: 4px;
+}
+
+/* FAQ */
+.faqItem {
+    background: #112240;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.faqQuestion {
+    padding: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    color: #fff;
+}
+.faqQuestion:hover { background: rgba(255,255,255,0.02); }
+.faqAnswer {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.3s ease;
+    color: #94a3b8;
+}
+.faqActive .faqAnswer { padding-bottom: 1.5rem; max-height: 200px; }
+.faqActive .faqIcon { transform: rotate(180deg); }
+.faqIcon { transition: 0.3s; }
+
+/* Footer */
+.footer {
+    background: #020c1b;
+    padding: 4rem 0;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+.socials a {
+    display: inline-block;
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.1);
+    line-height: 40px;
+    border-radius: 50%;
+    margin: 0 5px;
+    color: white;
+}
+.socials a:hover { background: #fbbf24; color: #0a192f; }
+
+/* Floating Button */
+.floatingBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #229ED9;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: white;
+    box-shadow: 0 5px 20px rgba(34, 158, 217, 0.5);
+    z-index: 1001;
+    transition: 0.3s;
+}
+.floatingBtn:hover { transform: scale(1.1); color: white; }
+
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2rem; }
+    .navLinks { display: none; }
+}

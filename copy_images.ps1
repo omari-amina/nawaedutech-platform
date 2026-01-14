@@ -1,0 +1,7 @@
+New-Item -ItemType Directory -Force -Path "public\products\printed"
+Copy-Item "c:\Users\amna\Documents\my PC\design\7.صور المنتجات\المنتجات المطبوعة\دفتر كيوت لاطفال بنات\generated_image_c5fdabd8-26a9-4284-882b-65b84910fdd0.png" "public\products\printed\girls-notebook-1.png"
+Copy-Item "c:\Users\amna\Documents\my PC\design\7.صور المنتجات\المنتجات المطبوعة\دفتر كيوت لاطفال بنات\generated_image_c8ce8f66-2e55-432f-9144-3180860ad818.png" "public\products\printed\girls-notebook-2.png"
+Copy-Item "c:\Users\amna\Documents\my PC\design\7.صور المنتجات\المنتجات المطبوعة\دفتر للاطفال بتصميم الطيار\generated_image_15f7b261-6ba4-4494-8b62-2f450e5f6aa1.png" "public\products\printed\pilot-notebook-1.png"
+Copy-Item "c:\Users\amna\Documents\my PC\design\7.صور المنتجات\المنتجات المطبوعة\دفتر للاطفال بتصميم الطيار\generated_image_3ed342bf-e1d2-4b6c-84e9-90c84c70f692.png" "public\products\printed\pilot-notebook-2.png"
+Copy-Item "c:\Users\amna\Documents\my PC\design\7.صور المنتجات\المنتجات المطبوعة\صور دفتر الكتابة\دفتر الكتاب من الواجهة الغلاف.png" "public\products\printed\writing-notebook-cover.png"
+Copy-Item "c:\Users\amna\Documents\my PC\design\7.صور المنتجات\المنتجات المطبوعة\صور دفتر الكتابة\صورة من الداخل.png" "public\products\printed\writing-notebook-inner.png"

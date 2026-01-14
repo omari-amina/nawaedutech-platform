@@ -17,6 +17,7 @@ import { ContactPage } from './pages/ContactPage';
 import { PrintedProductLanding } from './pages/PrintedProductLanding';
 import { DigitalProductLanding } from './pages/DigitalProductLanding';
 import { CourseLanding } from './pages/CourseLanding';
+import CostCrafterLanding from './pages/CostCrafter/CostCrafterLanding';
 import './lib/i18n';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
                 <Route path="/landing/printed-product" element={<PrintedProductLanding />} />
                 <Route path="/landing/digital-product" element={<DigitalProductLanding />} />
                 <Route path="/landing/course" element={<CourseLanding />} />
+                <Route path="/cost-crafter" element={<CostCrafterLanding />} />
               </Routes>
             </main>
             <Footer />
