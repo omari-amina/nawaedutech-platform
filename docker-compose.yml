@@ -1,0 +1,35 @@
+services:
+  # 1. قاعدة البيانات (MariaDB)
+  db:
+    image: mariadb:10.6
+    container_name: nawa_wordpress_db
+    command: '--default-authentication-plugin=mysql_native_password'
+    restart: always
+    environment:
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password_2026
+      MYSQL_ROOT_PASSWORD: root_password_secure
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # 2. تطبيق WordPress
+  wordpress:
+    image: wordpress:latest
+    container_name: nawa_wordpress_app
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_password_2026
+      WORDPRESS_DB_NAME: wordpress_db
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+  wp_data:

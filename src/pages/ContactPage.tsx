@@ -1,199 +1,315 @@
-import { useTranslation } from 'react-i18next';
+import { cloneElement, isValidElement, useEffect, type ReactElement, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Mail, Phone, MapPin, Send, MessageSquare } from 'lucide-react';
+import { Mail, MapPin, MessageCircle, Phone, Send } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { useLanguage } from '../contexts/LanguageContext';
+import {
+  contactFaqs,
+  contactMethods,
+  getLocalizedText,
+  resolveLocale,
+} from '../data/brandSite';
+import { SiteSectionHeading } from '../components/SiteSectionHeading';
+import { usePageMeta } from '../hooks/usePageMeta';
 
-const contactSchema = z.object({
-    name: z.string().min(2, 'Name is required'),
-    email: z.string().email('Invalid email address'),
-    subject: z.string().min(5, 'Subject is required'),
-    message: z.string().min(10, 'Message must be at least 10 characters'),
+const formSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  subject: z.string().min(4),
+  message: z.string().min(10),
 });
 
-type ContactForm = z.infer<typeof contactSchema>;
+type ContactFormValues = z.infer<typeof formSchema>;
 
 export function ContactPage() {
-    const { t, i18n } = useTranslation();
-    const isRTL = i18n.language === 'ar';
+  const { language } = useLanguage();
+  const locale = resolveLocale(language);
+  const [searchParams] = useSearchParams();
+  const initialSubject = searchParams.get('subject') ?? '';
+  const initialMessage = searchParams.get('message') ?? '';
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors, isSubmitting },
-    } = useForm<ContactForm>({
-        resolver: zodResolver(contactSchema),
+  usePageMeta({
+    title: locale === 'ar' ? 'تواصل' : 'Contact',
+    description: locale === 'ar'
+      ? 'تواصلي مع نوى عبر البريد أو واتساب لطلب منتج، الاستفسار عن دورة، أو اختيار الباقة المناسبة للمعلم أو الطالب أو وليّ الأمر.'
+      : 'Contact Nawa by email or WhatsApp to request a product, ask about a course, or choose the right bundle for a teacher, student, or parent.',
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: initialSubject,
+      message: initialMessage,
+    },
+  });
+
+  useEffect(() => {
+    reset({
+      name: '',
+      email: '',
+      subject: initialSubject,
+      message: initialMessage,
     });
+  }, [initialMessage, initialSubject, reset]);
 
-    const onSubmit = async (data: ContactForm) => {
-        // In a real app, this would send to an API
-        console.log('Form Submitted:', data);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        alert(t('contact.successMessage') || 'Message sent successfully!');
-        reset();
-    };
+  const onSubmit = (data: ContactFormValues) => {
+    const subjectPrefix = locale === 'ar'
+      ? 'رسالة من موقع NawaEduTech: '
+      : 'Message from NawaEduTech website: ';
+    const body = [
+      locale === 'ar' ? `الاسم: ${data.name}` : `Name: ${data.name}`,
+      locale === 'ar' ? `البريد الإلكتروني: ${data.email}` : `Email: ${data.email}`,
+      '',
+      locale === 'ar' ? 'تفاصيل الرسالة:' : 'Message details:',
+      data.message,
+    ].join('\n');
 
-    return (
-        <div className="min-h-screen bg-white font-sans">
-            {/* 1. HERO SECTION */}
-            <section className="relative py-24 px-4 text-center overflow-hidden bg-gradient-to-br from-[#340690] via-[#5f2cc7] to-[#864bf5] mb-20">
-                {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#f3b942]/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+    window.location.href = `mailto:contact@nawaedutech.com?subject=${encodeURIComponent(
+      `${subjectPrefix}${data.subject}`,
+    )}&body=${encodeURIComponent(body)}`;
 
-                <div className="container mx-auto relative z-10 py-10">
-                    <h1 className="text-4xl sm:text-6xl font-black text-white mb-6 leading-tight">
-                        {t('contact.title') || 'تواصل معنا'}
-                    </h1>
-                    <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed font-medium">
-                        {t('contact.subtitle') || 'نحن هنا للإجابة على جميع استفساراتك ومساعدتك في رحلتك التعليمية.'}
-                    </p>
-                </div>
-            </section>
+    reset({
+      name: '',
+      email: '',
+      subject: initialSubject,
+      message: initialMessage,
+    });
+  };
 
-            <div className="container mx-auto px-4 pb-32">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 max-w-7xl mx-auto items-start">
-
-                    {/* Left Side: Contact Info */}
-                    <div className="space-y-8">
-                        <div className="group bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
-                            {/* Decorative Background Icon */}
-                            <div className="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <Mail size={160} />
-                            </div>
-
-                            <div className="flex items-center gap-8 relative z-10">
-                                <div className="bg-[#340690]/10 w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 group-hover:bg-[#340690] transition-all duration-500 group-hover:scale-110">
-                                    <Mail size={32} className="text-[#340690] group-hover:text-white transition-colors" />
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-black text-[#340690] mb-2 font-arabic">{t('contact.email') || 'البريد الإلكتروني'}</h3>
-                                    <a href="mailto:contact@nawaedutech.com" className="text-xl font-bold text-gray-600 hover:text-[#5f2cc7] transition-colors lowercase block">contact@nawaedutech.com</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="group bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
-                            <div className="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <Phone size={160} />
-                            </div>
-
-                            <div className="flex items-center gap-8 relative z-10">
-                                <div className="bg-[#f3b942]/10 w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 group-hover:bg-[#f3b942] transition-all duration-500 group-hover:scale-110">
-                                    <Phone size={32} className="text-[#f3b942] group-hover:text-[#340690] transition-colors" />
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-black text-[#340690] mb-2 font-arabic">{t('contact.phone') || 'رقم الهاتف'}</h3>
-                                    <a href="tel:+213123456789" className="text-xl font-bold text-gray-600 tracking-wider block" dir="ltr">+213 123 456 789</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="group bg-white rounded-[2.5rem] p-10 shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 relative overflow-hidden">
-                            <div className="absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <MapPin size={160} />
-                            </div>
-
-                            <div className="flex items-center gap-8 relative z-10">
-                                <div className="bg-[#5f2cc7]/10 w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 group-hover:bg-[#5f2cc7] transition-all duration-500 group-hover:scale-110">
-                                    <MapPin size={32} className="text-[#5f2cc7] group-hover:text-white transition-colors" />
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-black text-[#340690] mb-2 font-arabic">{t('contact.office') || 'الموقع'}</h3>
-                                    <p className="text-xl font-bold text-gray-600 block">الجزائر العاصمة، الجزائر</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* FAQ CTA Card */}
-                        <div className="bg-[#340690] rounded-[3rem] p-12 text-white relative overflow-hidden shadow-2xl shadow-[#340690]/30 mt-12 group/faq">
-                            <div className="absolute -bottom-20 -right-20 opacity-10 group-hover/faq:scale-110 transition-transform duration-700">
-                                <MessageSquare size={300} strokeWidth={1} />
-                            </div>
-                            <h3 className="text-3xl font-black mb-6 relative z-10 font-arabic">{t('contact.faqTitle') || 'هل لديك أسئلة؟'}</h3>
-                            <p className="text-xl text-white/80 mb-10 relative z-10 leading-relaxed font-medium">نحن نوفر لك قسماً خاصاً بالأسئلة الشائعة لتجد إجابات سريعة حول منصتنا ومنتجاتنا.</p>
-                            <button className="bg-[#f3b942] text-[#340690] px-10 py-5 rounded-2xl font-black text-lg hover:scale-105 transition-all shadow-xl shadow-black/20 relative z-10">
-                                {t('contact.faqButton') || 'زيارة الأسئلة الشائعة'}
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Right Side: Contact Form */}
-                    <div className="bg-white rounded-[3.5rem] shadow-2xl border border-gray-50 p-12 relative overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-[#340690] via-[#5f2cc7] to-[#f3b942]"></div>
-
-                        <div className="mb-12">
-                            <h2 className="text-3xl font-black text-[#340690] mb-4 font-arabic">{t('contact.formTitle') || 'أرسل لنا رسالة'}</h2>
-                            <p className="text-gray-500 font-medium">سوف نرد عليك في أقرب وقت ممكن.</p>
-                        </div>
-
-                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div>
-                                    <label className="block text-sm font-black text-[#340690] uppercase tracking-widest mb-3 font-sans opacity-70">{t('contact.name') || 'الاسم الكامل'}</label>
-                                    <input
-                                        {...register('name')}
-                                        type="text"
-                                        className={`w-full px-8 py-5 bg-muted/20 border-2 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#340690]/5 transition-all text-lg font-bold placeholder:font-medium ${errors.name ? 'border-red-500' : 'border-transparent focus:border-[#340690]'}`}
-                                        placeholder={isRTL ? 'مثال: محمد علي' : 'e.g. John Doe'}
-                                    />
-                                    {errors.name && <p className="text-red-500 text-sm mt-3 font-bold px-2">{errors.name.message}</p>}
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-black text-[#340690] uppercase tracking-widest mb-3 font-sans opacity-70">{t('contact.emailLabel') || 'البريد الإلكتروني'}</label>
-                                    <input
-                                        {...register('email')}
-                                        type="email"
-                                        className={`w-full px-8 py-5 bg-muted/20 border-2 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#340690]/5 transition-all text-lg font-bold placeholder:font-medium ${errors.email ? 'border-red-500' : 'border-transparent focus:border-[#340690]'}`}
-                                        placeholder="email@example.com"
-                                    />
-                                    {errors.email && <p className="text-red-500 text-sm mt-3 font-bold px-2">{errors.email.message}</p>}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-black text-[#340690] uppercase tracking-widest mb-3 font-sans opacity-70">{t('contact.subject') || 'الموضوع'}</label>
-                                <input
-                                    {...register('subject')}
-                                    type="text"
-                                    className={`w-full px-8 py-5 bg-muted/20 border-2 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#340690]/5 transition-all text-lg font-bold placeholder:font-medium ${errors.subject ? 'border-red-500' : 'border-transparent focus:border-[#340690]'}`}
-                                    placeholder={isRTL ? 'بخصوص ماذا تتواصل معنا؟' : 'How can we help?'}
-                                />
-                                {errors.subject && <p className="text-red-500 text-sm mt-3 font-bold px-2">{errors.subject.message}</p>}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-black text-[#340690] uppercase tracking-widest mb-3 font-sans opacity-70">{t('contact.message') || 'الرسالة'}</label>
-                                <textarea
-                                    {...register('message')}
-                                    rows={5}
-                                    className={`w-full px-8 py-5 bg-muted/20 border-2 rounded-[1.5rem] focus:outline-none focus:ring-4 focus:ring-[#340690]/5 transition-all text-lg font-bold placeholder:font-medium resize-none ${errors.message ? 'border-red-500' : 'border-transparent focus:border-[#340690]'}`}
-                                    placeholder={isRTL ? 'اكتب رسالتك بالتفصيل هنا...' : 'Write your message details here...'}
-                                />
-                                {errors.message && <p className="text-red-500 text-sm mt-3 font-bold px-2">{errors.message.message}</p>}
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full bg-[#340690] text-white py-6 rounded-[1.5rem] font-black text-xl hover:bg-[#5f2cc7] transition-all shadow-2xl shadow-[#340690]/20 flex items-center justify-center disabled:opacity-70 group overflow-hidden relative"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-                                {isSubmitting ? (
-                                    <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-                                ) : (
-                                    <>
-                                        <Send className={`w-6 h-6 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform ${isRTL ? 'ml-3' : 'mr-3'}`} />
-                                        <span className="relative z-10 font-arabic">{t('contact.send') || 'إرسال الرسالة'}</span>
-                                    </>
-                                )}
-                            </button>
-                        </form>
-                    </div>
-                </div>
+  return (
+    <div className="overflow-hidden">
+      <section className="relative overflow-hidden py-20">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(243,185,66,0.16),transparent_22%),linear-gradient(135deg,#140728_0%,#240a5f_50%,#4d1eb2_100%)]" />
+        <div className="container relative z-10 mx-auto px-4">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
+            <div className="space-y-6 text-white">
+              <span className="inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-black">
+                {locale === 'ar' ? 'تواصل معنا' : 'Contact us'}
+              </span>
+              <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-6xl">
+                {locale === 'ar'
+                  ? 'نحن هنا لمساعدتك على اختيار المنتج أو الدورة أو الباقة المناسبة.'
+                  : 'We are here to help you choose the right product, course, or bundle.'}
+              </h1>
+              <p className="max-w-2xl text-lg leading-8 text-white/75">
+                {locale === 'ar'
+                  ? 'إذا كنت معلمة أو طالبة أو وليّة أمر، أرسلي طلبك وسنساعدك على الوصول إلى الخيار الأنسب بسرعة ووضوح.'
+                  : 'If you are a teacher, student, or parent, send your request and we will help you find the best fit with clarity and care.'}
+              </p>
             </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              {contactMethods.map((method, index) => {
+                const Icon = index === 0 ? Mail : index === 1 ? MessageCircle : MapPin;
+
+                return (
+                  <a
+                    key={method.href}
+                    href={method.href}
+                    className="rounded-[1.75rem] border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl transition hover:bg-white/15"
+                  >
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-accent">
+                      <Icon size={22} />
+                    </span>
+                    <div className="mt-5 text-sm font-black text-white/70">
+                      {getLocalizedText(method.title, locale)}
+                    </div>
+                    <div className="mt-2 text-base font-black">
+                      {getLocalizedText(method.value, locale)}
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
         </div>
-    );
+      </section>
+
+      <section className="container mx-auto px-4 py-16">
+        <div className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
+          <div className="space-y-6">
+            <SiteSectionHeading
+              eyebrow={locale === 'ar' ? 'بيانات التواصل' : 'Contact channels'}
+              title={locale === 'ar' ? 'اختر القناة الأقرب لنوع الطلب' : 'Choose the channel that fits the request'}
+              description={locale === 'ar'
+                ? 'ستجدين هنا أسرع الطرق للوصول إلينا سواء كان طلبك شراءً أو استفسارًا أو تعاونًا.'
+                : 'You will find the fastest ways to reach us whether your request is about purchasing, a question, or a collaboration.'}
+            />
+
+            <div className="space-y-4">
+              {contactMethods.map((method, index) => {
+                const Icon = index === 0 ? Mail : index === 1 ? Phone : MapPin;
+
+                return (
+                  <a
+                    key={method.href}
+                    href={method.href}
+                    className="site-surface block p-6"
+                  >
+                    <div className="flex items-start gap-4">
+                      <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/8 text-primary">
+                        <Icon size={20} />
+                      </span>
+                      <div className="space-y-2">
+                        <div className="text-sm font-black text-primary">
+                          {getLocalizedText(method.title, locale)}
+                        </div>
+                        <div className="text-lg font-black text-foreground">
+                          {getLocalizedText(method.value, locale)}
+                        </div>
+                        <p className="text-base leading-7 text-slate-600">
+                          {getLocalizedText(method.hint, locale)}
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="site-surface p-8 md:p-10">
+            <SiteSectionHeading
+              eyebrow={locale === 'ar' ? 'نموذج الرسالة' : 'Message form'}
+              title={locale === 'ar' ? 'أرسلي طلبك أو استفسارك مباشرة' : 'Send your request directly'}
+              description={locale === 'ar'
+                ? 'بعد الإرسال سيفتح بريدك الإلكتروني برسالة جاهزة، ويمكنك أيضًا استخدام واتساب للتواصل السريع.'
+                : 'After submission, your email app will open with a ready-to-send message. You can also use WhatsApp for faster contact.'}
+            />
+
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-5">
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field
+                  label={locale === 'ar' ? 'الاسم' : 'Name'}
+                  placeholder={locale === 'ar' ? 'مثال: سارة بن علي' : 'e.g. Sara Ben Ali'}
+                  error={errors.name ? (locale === 'ar' ? 'الاسم قصير جدًا' : 'Please enter a valid name') : undefined}
+                >
+                  <input
+                    {...register('name')}
+                    className="w-full rounded-[1.25rem] border border-slate-200 bg-white px-5 py-4 text-base font-bold text-foreground outline-none transition focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
+                  />
+                </Field>
+
+                <Field
+                  label={locale === 'ar' ? 'البريد الإلكتروني' : 'Email'}
+                  placeholder="email@example.com"
+                  error={errors.email ? (locale === 'ar' ? 'البريد غير صالح' : 'Please enter a valid email') : undefined}
+                >
+                  <input
+                    {...register('email')}
+                    className="w-full rounded-[1.25rem] border border-slate-200 bg-white px-5 py-4 text-base font-bold text-foreground outline-none transition focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
+                  />
+                </Field>
+              </div>
+
+              <Field
+                label={locale === 'ar' ? 'الموضوع' : 'Subject'}
+                placeholder={locale === 'ar' ? 'بماذا يمكننا مساعدتك؟' : 'How can we help?'}
+                error={errors.subject ? (locale === 'ar' ? 'يرجى كتابة الموضوع' : 'Please add a subject') : undefined}
+              >
+                <input
+                  {...register('subject')}
+                  className="w-full rounded-[1.25rem] border border-slate-200 bg-white px-5 py-4 text-base font-bold text-foreground outline-none transition focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
+                />
+              </Field>
+
+              <Field
+                label={locale === 'ar' ? 'الرسالة' : 'Message'}
+                placeholder={locale === 'ar' ? 'اكتب تفاصيل طلبك أو استفسارك هنا...' : 'Write your request or question here...'}
+                error={errors.message ? (locale === 'ar' ? 'الرسالة قصيرة جدًا' : 'Please add a longer message') : undefined}
+              >
+                <textarea
+                  {...register('message')}
+                  rows={6}
+                  className="w-full rounded-[1.25rem] border border-slate-200 bg-white px-5 py-4 text-base font-bold text-foreground outline-none transition focus:border-primary/30 focus:ring-4 focus:ring-primary/5"
+                />
+              </Field>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-black text-white transition hover:bg-primary disabled:opacity-70"
+              >
+                {isSubmitting ? (
+                  locale === 'ar' ? 'جارٍ الإرسال...' : 'Sending...'
+                ) : (
+                  <>
+                    <Send size={18} />
+                    {locale === 'ar' ? 'إرسال الرسالة' : 'Send message'}
+                  </>
+                )}
+              </button>
+
+              <a
+                href={contactMethods[1].href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-base font-black text-slate-700 transition hover:border-primary/20 hover:text-primary"
+              >
+                <Phone size={18} />
+                {locale === 'ar' ? 'تواصلي عبر واتساب' : 'Contact via WhatsApp'}
+              </a>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 py-16">
+        <SiteSectionHeading
+          eyebrow={locale === 'ar' ? 'أسئلة شائعة' : 'Frequently asked questions'}
+          title={locale === 'ar' ? 'إجابات سريعة تساعدك على الحسم' : 'Quick answers to help you decide'}
+          description={locale === 'ar'
+            ? 'جمعنا أكثر الأسئلة شيوعًا حتى تجدي المعلومة بسرعة قبل التواصل المباشر.'
+            : 'We gathered the most common questions so you can find what you need quickly before reaching out.'}
+          align="center"
+        />
+
+        <div className="mt-12 grid gap-4">
+          {contactFaqs.map((faq) => (
+            <article key={getLocalizedText(faq.question, locale)} className="site-surface p-6">
+              <h3 className="text-xl font-black text-foreground">
+                {getLocalizedText(faq.question, locale)}
+              </h3>
+              <p className="mt-3 text-base leading-8 text-slate-600">
+                {getLocalizedText(faq.answer, locale)}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  placeholder,
+  error,
+  children,
+}: {
+  label: string;
+  placeholder: string;
+  error?: string;
+  children: ReactNode;
+}) {
+  const child = isValidElement(children)
+    ? (children as ReactElement<{ placeholder?: string }>)
+    : null;
+
+  return (
+    <label className="block space-y-2">
+      <span className="text-sm font-black text-slate-700">{label}</span>
+      {child ? cloneElement(child, { placeholder }) : null}
+      {error ? <span className="block text-sm font-bold text-red-500">{error}</span> : null}
+    </label>
+  );
 }

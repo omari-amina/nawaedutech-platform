@@ -17,7 +17,7 @@ module.exports = {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', 'Almarai', 'sans-serif'],
+				sans: ['Manrope', 'Almarai', 'sans-serif'],
 				arabic: ['Almarai', 'sans-serif'],
 			},
 			colors: {

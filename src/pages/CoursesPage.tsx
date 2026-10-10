@@ -1,184 +1,176 @@
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { Clock, BookOpen, Filter } from 'lucide-react';
-
-interface Course {
-  id: string;
-  title_en: string;
-  title_ar: string;
-  short_description_en: string;
-  short_description_ar: string;
-  price: number;
-  is_free: boolean;
-  duration_hours: number;
-  level: string;
-  is_published: boolean;
-}
+import { ArrowUpLeft, CheckCircle2, PlayCircle, Sparkles } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import {
+  brandCourses,
+  getLocalizedList,
+  getLocalizedText,
+  resolveLocale,
+} from '../data/brandSite';
+import { SiteSectionHeading } from '../components/SiteSectionHeading';
+import { SiteCourseCard } from '../components/SiteCourseCard';
+import { usePageMeta } from '../hooks/usePageMeta';
 
 export function CoursesPage() {
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [filter, setFilter] = useState<string>('all');
-  const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
+  const locale = resolveLocale(language);
 
-  useEffect(() => {
-    loadCourses();
-  }, [filter]);
-
-  const loadCourses = async () => {
-    setLoading(true);
-    let query = supabase
-      .from('courses')
-      .select('*')
-      .eq('is_published', true);
-
-    if (filter === 'free') {
-      query = query.eq('is_free', true);
-    } else if (filter === 'paid') {
-      query = query.eq('is_free', false);
-    }
-
-    const { data } = await query;
-    if (data) setCourses(data);
-    setLoading(false);
-  };
+  usePageMeta({
+    title: locale === 'ar' ? 'الدورات' : 'Courses',
+    description: locale === 'ar'
+      ? 'استكشفي دورات نوى العملية في التعليم التفاعلي والتنظيم الذكي وأدوات الذكاء الاصطناعي للمعلم والطالب.'
+      : 'Explore Nawa practical courses in interactive teaching, smart organization, and AI tools for teachers and students.',
+  });
 
   return (
-    <div className="min-h-screen bg-white font-sans">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 text-center overflow-hidden border-b border-gray-50 mb-16">
-        <div className="absolute inset-0 z-0 opacity-5">
-          <img
-            src="/hero-nawa-brand.png"
-            alt="Background"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="container mx-auto relative z-10 py-10">
-          <h1 className="text-4xl sm:text-6xl font-black text-[#340690] mb-6 leading-tight">
-            {t('courses.title')}
-          </h1>
-          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed font-medium">
-            {t('courses.subtitle')}
-          </p>
+    <div className="overflow-hidden">
+      <section className="site-page-hero site-page-hero-dark">
+        <div className="container relative z-10 mx-auto px-4 pb-20 pt-14 md:pb-24 md:pt-18">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
+            <div className="space-y-6 text-white">
+              <span className="site-overline site-overline-light">
+                {locale === 'ar' ? 'رحلات تعليمية' : 'Learning tracks'}
+              </span>
+
+              <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-6xl">
+                {locale === 'ar'
+                  ? 'دورات عملية في التعليم التفاعلي والتنظيم الذكي والتقنية التعليمية.'
+                  : 'Practical courses in interactive teaching, smart organization, and educational technology.'}
+              </h1>
+
+              <p className="max-w-2xl text-lg leading-8 text-white/75">
+                {locale === 'ar'
+                  ? 'صممنا هذه المسارات لتمنح المعلم والطالب مهارات قابلة للتطبيق مباشرة، بنفس الروح الرسمية والراقية للتصميم المرجعي.'
+                  : 'These tracks are built to give teachers and students practical skills they can use immediately, with the same polished look as the reference design.'}
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <Link to="/contact" className="site-button-gold">
+                  {locale === 'ar' ? 'اطلبي استشارة تدريبية' : 'Request learning advice'}
+                  <ArrowUpLeft size={18} />
+                </Link>
+
+                <Link to="/about" className="site-button-white">
+                  {locale === 'ar' ? 'تعرفي على فلسفتنا' : 'See our philosophy'}
+                </Link>
+              </div>
+            </div>
+
+            <div className="rounded-[2.5rem] border border-white/12 bg-white/10 p-5 backdrop-blur-xl">
+              <img
+                src="/hero-nawa-brand.png"
+                alt="NawaEduTech learning journeys"
+                className="h-full min-h-[28rem] w-full rounded-[2rem] object-cover"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pb-24">
-        {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
-          <FilterButton active={filter === 'all'} onClick={() => setFilter('all')}>
-            {t('courses.filter.all')}
-          </FilterButton>
-          <FilterButton active={filter === 'free'} onClick={() => setFilter('free')}>
-            {t('courses.filter.free')}
-          </FilterButton>
-          <FilterButton active={filter === 'paid'} onClick={() => setFilter('paid')}>
-            {t('courses.filter.paid')}
-          </FilterButton>
-        </div>
+      <section className="site-section bg-white">
+        <div className="container mx-auto px-4">
+          <SiteSectionHeading
+            eyebrow={locale === 'ar' ? 'المسارات المتاحة' : 'Available tracks'}
+            title={locale === 'ar'
+              ? 'اختاري الدورة الأقرب لمرحلتك الحالية'
+              : 'Choose the course that matches your current stage'}
+            description={locale === 'ar'
+              ? 'سواء كنت تبحثين عن تطوير أسلوب التدريس أو استخدام أدوات ذكية أو تنظيم الدراسة، ستجدين هنا مسارًا واضحًا.'
+              : 'Whether you want to improve teaching methods, use smarter tools, or organize study better, you will find a clear path here.'}
+            align="center"
+          />
 
-        {/* Courses Grid */}
-        {loading ? (
-          <div className="text-center py-20">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-[#340690] border-t-transparent"></div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {courses.map((course) => (
-              <Link
+          <div className="mt-12 grid gap-6 xl:grid-cols-3">
+            {brandCourses.map((course) => (
+              <SiteCourseCard
                 key={course.id}
-                to={`/courses/${course.id}`}
-                className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col"
-              >
-                {/* Course Image/Header */}
-                <div className="h-56 bg-gradient-to-br from-[#340690] via-[#5f2cc7] to-[#864bf5] relative overflow-hidden">
-                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
-
-                  {/* Decorative Elements */}
-                  <div className="absolute top-4 right-4 w-20 h-20 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all"></div>
-                  <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#f3b942]/20 rounded-full blur-3xl group-hover:blur-2xl transition-all"></div>
-
-                  {/* Book Icon */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <BookOpen className="w-24 h-24 text-white/20 group-hover:text-white/30 group-hover:scale-110 transition-all duration-500" strokeWidth={1} />
-                  </div>
-
-                  {/* Level Badge */}
-                  <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                    <span className="text-xs font-black text-[#340690] bg-white/95 backdrop-blur-sm px-4 py-2 rounded-full uppercase tracking-widest shadow-lg">
-                      {t(`courses.level.${course.level}`)}
-                    </span>
-                    {course.is_free && (
-                      <span className="text-xs font-black text-white bg-green-500 px-4 py-2 rounded-full uppercase tracking-wide shadow-lg">
-                        {t('common.free')}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Course Info */}
-                <div className="p-8 flex-1 flex flex-col">
-                  <h3 className="text-2xl font-extrabold mb-4 text-gray-900 group-hover:text-[#340690] transition-colors leading-tight">
-                    {isRTL ? course.title_ar : course.title_en}
-                  </h3>
-                  <p className="text-gray-600 mb-8 line-clamp-3 text-base leading-relaxed flex-1">
-                    {isRTL ? course.short_description_ar : course.short_description_en}
-                  </p>
-
-                  <div className="mt-auto pt-6 border-t border-gray-50 flex items-center justify-between gap-4">
-                    <div className="flex items-center text-gray-500 text-sm font-medium">
-                      <Clock size={18} className="me-2 text-[#5f2cc7]" />
-                      <span>{course.duration_hours} {t('courses.duration')}</span>
-                    </div>
-                    <div className="text-2xl font-black text-[#340690]">
-                      {course.is_free ? (
-                        <span className="text-lg text-green-600">{t('common.free')}</span>
-                      ) : (
-                        <span>${course.price}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Link>
+                course={course}
+                locale={locale}
+                ctaLabel={locale === 'ar' ? 'تفاصيل الدورة' : 'Course details'}
+              />
             ))}
           </div>
-        )}
+        </div>
+      </section>
 
-        {/* Empty State */}
-        {!loading && courses.length === 0 && (
-          <div className="text-center py-24 bg-muted/20 rounded-[3rem] border-2 border-dashed border-gray-100 max-w-lg mx-auto">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-              <Filter size={32} className="text-gray-300" />
+      <section className="site-section">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr]">
+            <div className="site-panel">
+              <SiteSectionHeading
+                eyebrow={locale === 'ar' ? 'ماذا ستجدين داخل كل دورة؟' : 'What will you find in each course?'}
+                title={locale === 'ar'
+                  ? 'تفاصيل كافية لاتخاذ القرار بثقة'
+                  : 'Enough detail to make a decision with confidence'}
+                description={locale === 'ar'
+                  ? 'نوضح لك المدة والمستوى وطبيعة التعلّم والنتائج المتوقعة حتى تختاري البرنامج المناسب بسهولة.'
+                  : 'We clarify duration, level, format, and expected outcomes so choosing the right program feels easier.'}
+              />
             </div>
-            <p className="text-gray-500 text-xl font-bold mb-6">{t('common.noResults')}</p>
-            <button
-              onClick={() => setFilter('all')}
-              className="bg-[#340690] text-white px-8 py-3 rounded-2xl font-bold hover:scale-105 transition-all shadow-xl shadow-[#340690]/20"
-            >
-              {t('courses.clearFilters')}
-            </button>
+
+            <div className="grid gap-4">
+              {brandCourses.map((course) => (
+                <article key={course.id} className="site-panel">
+                  <div className="mb-4 flex items-center gap-3">
+                    <span
+                      className="inline-flex h-12 w-12 items-center justify-center rounded-2xl text-white"
+                      style={{ backgroundColor: course.accent }}
+                    >
+                      <PlayCircle size={22} />
+                    </span>
+
+                    <div>
+                      <div className="text-sm font-black text-primary">
+                        {getLocalizedText(course.badge, locale)}
+                      </div>
+                      <h3 className="text-xl font-black text-foreground">
+                        {getLocalizedText(course.title, locale)}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-3">
+                    {getLocalizedList(course.outcomes, locale).map((outcome) => (
+                      <div key={outcome} className="flex items-start gap-3 text-slate-600">
+                        <CheckCircle2 size={18} className="mt-1 shrink-0 text-primary" />
+                        <span className="leading-7">{outcome}</span>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      </section>
+
+      <section className="site-section">
+        <div className="container mx-auto px-4">
+          <div className="site-surface bg-[linear-gradient(135deg,rgba(49,11,130,0.06),rgba(238,179,42,0.12))] p-8 md:p-12">
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div className="max-w-2xl">
+                <div className="mb-3 flex items-center gap-2 text-primary">
+                  <Sparkles size={18} />
+                  <span className="text-sm font-black">
+                    {locale === 'ar' ? 'اختيار أدق' : 'A clearer choice'}
+                  </span>
+                </div>
+
+                <h2 className="text-3xl font-black leading-tight text-foreground md:text-4xl">
+                  {locale === 'ar'
+                    ? 'إذا كنت تبحثين عن المسار الأنسب لك أو لفريقك، سنساعدك على اختيار البرنامج الذي يحقق نتيجة فعلية.'
+                    : 'If you are looking for the right track for yourself or your team, we will help you choose the program that leads to a real result.'}
+                </h2>
+              </div>
+
+              <Link to="/contact" className="site-button-primary">
+                {locale === 'ar' ? 'اسألي عن البرنامج المناسب' : 'Ask about the right track'}
+                <ArrowUpLeft size={18} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
-
-function FilterButton({ children, active, onClick }: { children: React.ReactNode, active: boolean, onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`px-8 py-3.5 rounded-2xl font-black text-lg transition-all duration-500 transform ${active
-          ? 'bg-[#340690] text-white shadow-2xl shadow-[#340690]/30 -translate-y-1'
-          : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-[#340690] border border-gray-100 hover:border-[#340690]/20'
-        }`}
-    >
-      {children}
-    </button>
-  )
-}
-

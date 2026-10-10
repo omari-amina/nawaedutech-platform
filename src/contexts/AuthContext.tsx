@@ -1,6 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
+import React, { createContext, useContext, useState } from 'react';
+
+// Simplified User Type since we don't have supabase.User anymore
+interface User {
+  id: string;
+  email?: string;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -13,73 +17,21 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user] = useState<User | null>(null);
+  const [loading] = useState(false);
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw error;
+  const signIn = async () => {
+    console.log("Auth is disabled in static mode");
+    alert("تسجيل الدخول غير متاح حالياً. يرجى التواصل معنا لطلب المنتجات.");
   };
 
-  const signUp = async (email: string, password: string, fullName: string, role: string) => {
-    console.log('Attempting signup for:', email);
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        console.error('Supabase Auth Error:', error);
-        throw error;
-      }
-
-      console.log('Auth signup successful, creating profile...');
-
-      // Create profile
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: data.user.id,
-            full_name: fullName,
-            role: role,
-          });
-        if (profileError) {
-          console.error('Profile creation error:', profileError);
-          throw profileError;
-        }
-      }
-      console.log('Signup and Profile creation complete!');
-    } catch (err: any) {
-      console.error('SignUp catch block:', err);
-      throw err;
-    }
+  const signUp = async () => {
+    console.log("Auth is disabled in static mode");
+    alert("التسجيل غير متاح حالياً. يرجى التواصل معنا لطلب المنتجات.");
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    // No-op
   };
 
   return (

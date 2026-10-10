@@ -17,8 +17,8 @@ dist-ssr
 !.vscode/extensions.json
 .idea
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Archives and temporary files
+*.zip
+*.pdf
+tmp-theme-golden/
+nawaedutech-theme*

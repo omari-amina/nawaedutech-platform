@@ -1,0 +1,80 @@
+export const featuredCourses = [
+    {
+        id: '1',
+        title_en: 'Craft Manufacturing Mastery',
+        title_ar: 'دورة إتقان الحرف اليدوية',
+        short_description_en: 'Learn how to start your own craft business from scratch.',
+        short_description_ar: 'تعلم كيف تبدأ مشروعك الحرفي الخاص من الصفر وباحترافية.',
+        price: 5000,
+        is_free: false,
+        featured: true,
+        image_url: 'https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&q=80',
+    },
+    {
+        id: '2',
+        title_en: 'Digital Education Tools',
+        title_ar: 'أدوات التعليم الرقمي',
+        short_description_en: 'Master the digital tools needed for modern teaching.',
+        short_description_ar: 'احترف استخدام الأدوات الرقمية اللازمة للتعليم الحديث.',
+        price: 3500,
+        is_free: false,
+        featured: true,
+        image_url: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80',
+    },
+];
+
+export const featuredProducts = [
+    {
+        id: '1',
+        name_en: 'Teacher Weekly Planner',
+        name_ar: 'مخطط أسبوعي للمعلم',
+        description_en: 'Saves you 30 minutes weekly.',
+        description_ar: 'يوفّر لك 30 دقيقة أسبوعيًا.',
+        price: 1500,
+        featured: true,
+        image_url: 'https://images.unsplash.com/photo-1506784335131-e699942b96e9?auto=format&fit=crop&q=80',
+    },
+    {
+        id: 'cost-crafter',
+        name_en: 'CostCrafter Pro',
+        name_ar: 'برنامج CostCrafter Pro',
+        description_en: 'Calculate your craft costs accurately.',
+        description_ar: 'احسبي تكلفة منتجاتك اليدوية والطباعة بدقة واضمني أرباحك.',
+        price: 3000,
+        featured: true,
+        image_url: '/cost-crafter-preview.png',
+    },
+    {
+        id: 'daftar-ustad',
+        name_en: 'Digital Teacher Notebook',
+        name_ar: 'دفتر الأستاذ الرقمي',
+        description_en: 'Manage classes and calculate grades automatically.',
+        description_ar: 'إدارة الأقسام، حساب المعدلات آلياً، وتحليل النتائج بضغطة زر.',
+        price: 2500,
+        featured: true,
+        image_url: '/daftar-ustad-preview.png',
+    },
+];
+
+export const testimonials = [
+    {
+        id: '1',
+        name_en: 'Sarah Ahmed',
+        name_ar: 'سارة أحمد',
+        role_en: 'Teacher',
+        role_ar: 'أستاذة',
+        content_en: 'The digital notebook changed my life! I save hours every week.',
+        content_ar: 'دفتر الأستاذ الرقمي غيّر حياتي! أنا أوفر ساعات كل أسبوع.',
+        rating: 5,
+    },
+    {
+        id: '2',
+        name_en: 'Mohamed Ali',
+        name_ar: 'محمد علي',
+        role_en: 'Crafter',
+        role_ar: 'حرفي',
+        content_en: 'CostCrafter helps me price my products with confidence.',
+        content_ar: 'برنامج CostCrafter ساعدني في تسعير منتجاتي بثقة وضمان الربح.',
+        rating: 5,
+    },
+];

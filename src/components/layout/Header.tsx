@@ -1,166 +1,169 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useAuth } from '../../contexts/AuthContext';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Globe, Menu, ShoppingCart, X } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { ShoppingCart, User, Globe, LogOut, LayoutDashboard, Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { useCart } from '../../contexts/CartContext';
+import { resolveLocale, siteNavigation, siteCopy, getLocalizedText } from '../../data/brandSite';
+import { cn } from '../../lib/utils';
 
 export function Header() {
-  const { t } = useTranslation();
-  const { user, signOut } = useAuth();
   const { language, toggleLanguage } = useLanguage();
-  const navigate = useNavigate();
+  const { itemCount } = useCart();
   const location = useLocation();
-  const [showUserMenu, setShowUserMenu] = useState(false);
+  const locale = resolveLocale(language);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
-  const isActive = (path: string) => location.pathname === path;
+  const primaryCta = locale === 'ar' ? 'اطلبي الآن' : 'Start now';
 
   return (
-    <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-28">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse group">
-            <div className="relative">
-              <div className="absolute inset-0 bg-accent blur-lg opacity-0 group-hover:opacity-20 transition-opacity"></div>
-              <img
-                src="/logo-nawa.png"
-                alt="NawaEduTech Logo"
-                className="h-24 w-auto object-contain relative z-10"
-              />
-            </div>
-          </Link>
+    <header className="sticky top-0 z-50 px-4 py-4">
+      <div className="container mx-auto">
+        <div className="site-header-shell px-4 md:px-6">
+          <div className="flex min-h-[5.5rem] items-center justify-between gap-4">
+            <Link to="/" className="flex min-w-0 items-center gap-3">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.35rem] bg-[#f7f1ff] shadow-[0_18px_42px_-24px_rgba(49,11,130,0.45)]">
+                <img
+                  src="/logo-icon.png"
+                  alt="NawaEduTech"
+                  className="h-9 w-9 object-contain"
+                />
+              </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
-            <NavLink to="/" active={isActive('/')}>{t('nav.home')}</NavLink>
-            <NavLink to="/shop" active={isActive('/shop')}>{t('nav.shop')}</NavLink>
-            <NavLink to="/courses" active={isActive('/courses')}>{t('nav.courses')}</NavLink>
-            <NavLink to="/about" active={isActive('/about')}>{t('nav.about')}</NavLink>
-            <NavLink to="/contact" active={isActive('/contact')}>{t('nav.contact')}</NavLink>
-          </nav>
-
-          {/* Actions */}
-          <div className="flex items-center space-x-4 rtl:space-x-reverse">
-            {/* Cart */}
-            <Link
-              to="/cart"
-              className="relative p-2 text-gray-600 hover:text-primary transition-colors hover:bg-primary/5 rounded-full"
-            >
-              <ShoppingCart size={22} />
-              {/* Add Cart Badge logic here if needed */}
+              <div className="min-w-0 space-y-1">
+                <div className="truncate text-base font-black text-primary md:text-lg">NawaEduTech</div>
+                <div className="hidden truncate text-xs font-bold text-slate-500 md:block">
+                  {getLocalizedText(siteCopy.heroEyebrow, locale)}
+                </div>
+              </div>
             </Link>
 
-            {/* User Menu */}
-            {user ? (
-              <div className="relative">
-                <button
-                  onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-2 rtl:space-x-reverse p-1 pr-3 rtl:pl-3 rtl:pr-1 rounded-full border border-gray-200 hover:shadow-md transition-all"
-                >
-                  <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
-                    {user.email?.[0].toUpperCase()}
-                  </div>
-                </button>
-                {showUserMenu && (
-                  <div className="absolute right-0 rtl:left-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
-                    <div className="px-4 py-2 border-b border-gray-100 mb-2">
-                      <p className="text-sm font-semibold text-gray-900 truncate">{user.email}</p>
-                    </div>
-                    <Link
-                      to="/dashboard"
-                      className="flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-primary"
-                      onClick={() => setShowUserMenu(false)}
-                    >
-                      <LayoutDashboard size={18} />
-                      <span>{t('nav.dashboard')}</span>
-                    </Link>
-                    <button
-                      onClick={() => {
-                        handleSignOut();
-                        setShowUserMenu(false);
-                      }}
-                      className="flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 text-red-500 hover:bg-red-50 w-full text-left rtl:text-right"
-                    >
-                      <LogOut size={18} />
-                      <span>{t('nav.logout')}</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="hidden md:flex items-center space-x-3 rtl:space-x-reverse">
-                <Link
-                  to="/login"
-                  className="text-gray-600 hover:text-primary font-medium px-4 py-2"
-                >
-                  {t('nav.login')}
-                </Link>
-                <Link
-                  to="/signup"
-                  className="bg-primary text-white px-5 py-2.5 rounded-full font-medium hover:bg-primary-light hover:shadow-lg hover:shadow-primary/20 transition-all transform hover:-translate-y-0.5"
-                >
-                  {t('nav.signup')}
-                </Link>
-              </div>
-            )}
+            <nav className="hidden items-center gap-2 lg:flex">
+              {siteNavigation.map((item) => {
+                const active = location.pathname === item.href;
 
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 text-gray-600"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X /> : <Menu />}
-            </button>
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className={cn(
+                      'rounded-full px-4 py-2.5 text-sm font-black transition-all duration-300',
+                      active
+                        ? 'bg-primary text-white shadow-[0_16px_34px_-24px_rgba(49,11,130,0.8)]'
+                        : 'text-slate-700 hover:bg-[#f6f1ff] hover:text-primary',
+                    )}
+                  >
+                    {getLocalizedText(item.label, locale)}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="hidden items-center gap-3 lg:flex">
+              <Link
+                to="/cart"
+                className="relative inline-flex items-center justify-center h-11 w-11 rounded-full border border-slate-200 bg-white text-slate-700 transition hover:border-primary/25 hover:text-primary"
+                aria-label={locale === 'ar' ? 'سلة التسوق' : 'Cart'}
+              >
+                <ShoppingCart size={18} />
+                {itemCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-primary px-1 text-xs font-black text-white shadow-sm">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
+
+              <button
+                onClick={toggleLanguage}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 transition hover:border-primary/25 hover:text-primary"
+              >
+                <Globe size={16} />
+                {locale === 'ar' ? 'EN' : 'AR'}
+              </button>
+
+              <Link to="/contact" className="site-button-gold px-5 py-3">
+                {primaryCta}
+              </Link>
+            </div>
+
+            <div className="flex items-center gap-2 lg:hidden">
+              <Link
+                to="/cart"
+                className="relative inline-flex h-11 w-11 items-center justify-center rounded-[1.1rem] border border-slate-200 bg-white text-slate-700"
+                aria-label={locale === 'ar' ? 'سلة التسوق' : 'Cart'}
+              >
+                <ShoppingCart size={18} />
+                {itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-black text-white">
+                    {itemCount}
+                  </span>
+                )}
+              </Link>
+
+              <button
+                onClick={() => setMobileMenuOpen((value) => !value)}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-[1.1rem] border border-slate-200 text-slate-700"
+                aria-label={locale === 'ar' ? 'فتح القائمة' : 'Toggle menu'}
+              >
+                {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
           </div>
+
+          {mobileMenuOpen ? (
+            <div className="border-t border-slate-100 py-4 lg:hidden">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3 rounded-[1.5rem] bg-[#f8f5ff] p-3">
+                  <span className="text-sm font-black text-slate-500">
+                    {locale === 'ar' ? 'تبديل اللغة' : 'Language'}
+                  </span>
+
+                  <button
+                    onClick={toggleLanguage}
+                    className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-black text-primary shadow-sm"
+                  >
+                    <Globe size={16} />
+                    {locale === 'ar' ? 'EN' : 'AR'}
+                  </button>
+                </div>
+
+                <nav className="space-y-2">
+                  {siteNavigation.map((item) => {
+                    const active = location.pathname === item.href;
+
+                    return (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={cn(
+                          'block rounded-[1.25rem] px-4 py-3 text-sm font-black transition-colors',
+                          active
+                            ? 'bg-primary text-white'
+                            : 'bg-slate-50 text-slate-700 hover:bg-[#f6f1ff] hover:text-primary',
+                        )}
+                      >
+                        {getLocalizedText(item.label, locale)}
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                <Link
+                  to="/contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="site-button-gold flex w-full"
+                >
+                  {primaryCta}
+                </Link>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
-
-      {/* Mobile Menu (Simplified) */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white">
-          <div className="space-y-1 px-4 py-4">
-            <MobileNavLink to="/" onClick={() => setMobileMenuOpen(false)}>{t('nav.home')}</MobileNavLink>
-            <MobileNavLink to="/shop" onClick={() => setMobileMenuOpen(false)}>{t('nav.shop')}</MobileNavLink>
-            <MobileNavLink to="/courses" onClick={() => setMobileMenuOpen(false)}>{t('nav.courses')}</MobileNavLink>
-            <MobileNavLink to="/about" onClick={() => setMobileMenuOpen(false)}>{t('nav.about')}</MobileNavLink>
-            <MobileNavLink to="/contact" onClick={() => setMobileMenuOpen(false)}>{t('nav.contact')}</MobileNavLink>
-          </div>
-        </div>
-      )}
     </header>
-  );
-}
-
-function NavLink({ to, children, active }: { to: string, children: React.ReactNode, active: boolean }) {
-  return (
-    <Link
-      to={to}
-      className={`relative font-medium transition-colors duration-300 ${active ? 'text-primary' : 'text-gray-500 hover:text-primary'
-        }`}
-    >
-      {children}
-      {active && (
-        <span className="absolute -bottom-8 left-0 right-0 h-1 bg-primary rounded-t-full"></span>
-      )}
-    </Link>
-  );
-}
-
-function MobileNavLink({ to, children, onClick }: { to: string, children: React.ReactNode, onClick: () => void }) {
-  return (
-    <Link
-      to={to}
-      onClick={onClick}
-      className="block px-3 py-3 rounded-md text-base font-medium text-gray-600 hover:text-primary hover:bg-gray-50"
-    >
-      {children}
-    </Link>
   );
 }

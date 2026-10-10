@@ -1,109 +1,161 @@
-import { useTranslation } from 'react-i18next';
-import { Target, Heart, Lightbulb, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowUpLeft, Compass, Gem, HeartHandshake, Lightbulb, Target } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import {
+  aboutValues,
+  brandStory,
+  getLocalizedText,
+  resolveLocale,
+  siteMetrics,
+} from '../data/brandSite';
+import { SiteSectionHeading } from '../components/SiteSectionHeading';
+import { usePageMeta } from '../hooks/usePageMeta';
+
+const valueIcons = [Lightbulb, HeartHandshake, Gem];
 
 export function AboutPage() {
-    const { t } = useTranslation();
+  const { language } = useLanguage();
+  const locale = resolveLocale(language);
 
-    return (
-        <div className="min-h-screen bg-white font-sans">
-            {/* 1. HERO SECTION */}
-            <section className="relative py-20 px-4 text-center overflow-hidden border-b border-gray-50">
-                {/* Background Illustration with Overlay (Subtle) */}
-                <div className="absolute inset-0 z-0 opacity-10">
-                    <img
-                        src="/hero-nawa-brand.png"
-                        alt="Background"
-                        className="w-full h-full object-cover"
-                    />
-                </div>
+  usePageMeta({
+    title: locale === 'ar' ? 'من نحن' : 'About',
+    description: locale === 'ar'
+      ? 'تعرّفي على قصة نوى ورسالتها في تمكين المعلمين والطلاب عبر أدوات تعليمية وتنظيمية ذكية وهوية جزائرية مبتكرة.'
+      : 'Learn the Nawa story and its mission to empower teachers and students through smart educational and organizational tools.',
+  });
 
-                <div className="container mx-auto relative z-10 py-10">
-                    <h1 className="text-4xl sm:text-6xl font-black text-[#340690] mb-6 leading-tight">
-                        {t('aboutPage.title')}
-                    </h1>
-                    <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed font-medium">
-                        {t('aboutPage.subtitle')}
-                    </p>
-                </div>
-            </section>
+  return (
+    <div className="overflow-hidden">
+      <section className="site-page-hero site-page-hero-light">
+        <div className="container relative z-10 mx-auto px-4 pb-20 pt-14 md:pb-24 md:pt-18">
+          <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div className="space-y-6">
+              <span className="site-overline site-overline-dark">
+                {getLocalizedText(brandStory.eyebrow, locale)}
+              </span>
 
-            {/* 2. THE STORY SECTION */}
-            <section className="py-24 px-4">
-                <div className="container mx-auto">
-                    <div className="flex flex-col lg:flex-row items-center gap-16">
-                        <div className="lg:w-1/2">
-                            <div className="relative">
-                                <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#f3b942]/20 rounded-full blur-2xl"></div>
-                                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[#340690]/10 rounded-full blur-3xl"></div>
-                                <div className="bg-muted/50 rounded-3xl aspect-[4/3] w-full flex items-center justify-center relative overflow-hidden shadow-2xl border border-white">
-                                    <img
-                                        src="/hero-illustration.png"
-                                        alt="Story Illustration"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="lg:w-1/2 space-y-8 text-right">
-                            <h2 className="text-4xl font-extrabold text-[#340690] relative inline-block">
-                                {t('aboutPage.storyTitle')}
-                                <span className="absolute bottom-0 right-0 w-1/2 h-1 bg-[#f3b942] rounded-full"></span>
-                            </h2>
-                            <div className="space-y-6">
-                                <p className="text-xl text-gray-800 leading-relaxed">
-                                    {t('aboutPage.storyP1')}
-                                </p>
-                                <p className="text-xl text-gray-600 leading-relaxed">
-                                    {t('aboutPage.storyP2')}
-                                </p>
-                                <p className="text-xl text-[#340690] leading-relaxed font-bold italic">
-                                    {t('aboutPage.storyP3')}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+              <h1 className="max-w-3xl text-4xl font-black leading-tight text-foreground md:text-6xl">
+                {locale === 'ar'
+                  ? 'نطوّر أدوات تعليمية وتنظيمية ذكية تجعل التعلم أوضح وأكثر أثرًا.'
+                  : 'We create smart educational and organizational tools that make learning clearer and more impactful.'}
+              </h1>
 
-            {/* 3. VALUES SECTION */}
-            <section className="py-24 px-4 bg-muted/40">
-                <div className="container mx-auto">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-4xl font-black text-[#340690] mb-4">{t('aboutPage.valuesTitle')}</h2>
-                        <div className="w-16 h-1.5 bg-[#f3b942] mx-auto rounded-full"></div>
-                    </div>
+              <p className="max-w-2xl text-lg leading-8 text-slate-600">
+                {locale === 'ar'
+                  ? 'في نوى نؤمن أن الجمال في التعليم ليس ترفًا، وأن التنظيم والتقنية عندما يُقدّمان بلغة بسيطة يصنعان أثرًا حقيقيًا.'
+                  : 'At Nawa, we believe beauty in learning is not a luxury, and that organization and technology create real impact when delivered with clarity.'}
+              </p>
 
-                    <div className="grid md:grid-cols-3 gap-8">
-                        <ValueCard
-                            icon={<Lightbulb className="w-10 h-10 text-[#340690]" />}
-                            title={t('aboutPage.values.innovation.title')}
-                            desc={t('aboutPage.values.innovation.desc')}
-                        />
-                        <ValueCard
-                            icon={<Heart className="w-10 h-10 text-red-500" />}
-                            title={t('aboutPage.values.empathy.title')}
-                            desc={t('aboutPage.values.empathy.desc')}
-                        />
-                        <ValueCard
-                            icon={<Users className="w-10 h-10 text-[#5f2cc7]" />}
-                            title={t('aboutPage.values.community.title')}
-                            desc={t('aboutPage.values.community.desc')}
-                        />
-                    </div>
-                </div>
-            </section>
-        </div>
-    );
-}
+              <div className="flex flex-wrap gap-4">
+                <Link to="/contact" className="site-button-primary">
+                  {locale === 'ar' ? 'تواصلي معنا' : 'Contact us'}
+                  <ArrowUpLeft size={18} />
+                </Link>
 
-function ValueCard({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) {
-    return (
-        <div className="bg-white p-10 rounded-3xl shadow-sm hover:shadow-xl transition-all duration-300 text-center border border-gray-50 flex flex-col items-center">
-            <div className="bg-gray-50 w-24 h-24 rounded-2xl flex items-center justify-center mb-8 transform group-hover:rotate-6 transition-transform">
-                {icon}
+                <Link to="/courses" className="site-button-ghost">
+                  {locale === 'ar' ? 'استكشفي الدورات' : 'Explore courses'}
+                </Link>
+              </div>
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-[#340690]">{title}</h3>
-            <p className="text-gray-600 leading-relaxed text-lg">{desc}</p>
+
+            <div className="site-surface overflow-hidden p-4">
+              <img
+                src="/hero-illustration.png"
+                alt="NawaEduTech story visual"
+                className="h-full min-h-[28rem] w-full rounded-[2rem] object-cover"
+              />
+            </div>
+          </div>
         </div>
-    );
+      </section>
+
+      <section className="site-section">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="site-panel">
+              <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/8 text-primary">
+                <Compass size={24} />
+              </div>
+              <h2 className="text-3xl font-black leading-tight text-foreground">
+                {getLocalizedText(brandStory.title, locale)}
+              </h2>
+            </div>
+
+            <div className="space-y-4 text-lg leading-8 text-slate-600">
+              {brandStory.paragraphs[locale].map((paragraph) => (
+                <div key={paragraph} className="site-panel">
+                  {paragraph}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="site-section bg-white">
+        <div className="container mx-auto px-4">
+          <SiteSectionHeading
+            eyebrow={locale === 'ar' ? 'قيمنا' : 'Our values'}
+            title={locale === 'ar'
+              ? 'قيم تقود كل منتج ودورة وتجربة نقدمها'
+              : 'Values that guide every product, course, and experience we offer'}
+            description={locale === 'ar'
+              ? 'هذه القيم جزء أساسي من ملف نوى، وهي التي توجه طريقة التصميم والخطاب والخدمة التي نقدمها.'
+              : 'These values sit at the core of Nawa and guide the way we design, communicate, and serve our audience.'}
+            align="center"
+          />
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            {aboutValues.map((value, index) => {
+              const Icon = valueIcons[index] ?? Target;
+
+              return (
+                <article key={getLocalizedText(value.title, locale)} className="site-panel text-center">
+                  <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-primary/8 text-primary">
+                    <Icon size={26} />
+                  </span>
+                  <h3 className="mt-6 text-2xl font-black text-foreground">
+                    {getLocalizedText(value.title, locale)}
+                  </h3>
+                  <p className="mt-4 text-base leading-8 text-slate-600">
+                    {getLocalizedText(value.description, locale)}
+                  </p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="site-section">
+        <div className="container mx-auto px-4">
+          <SiteSectionHeading
+            eyebrow={locale === 'ar' ? 'لماذا يختارنا العملاء؟' : 'Why clients choose us'}
+            title={locale === 'ar'
+              ? 'ثلاثة أمور نحرص عليها في كل ما نقدمه'
+              : 'Three things we focus on in everything we offer'}
+            description={locale === 'ar'
+              ? 'نركز على الوضوح، الفائدة العملية، وسهولة التواصل حتى تكون التجربة مريحة وواثقة.'
+              : 'We focus on clarity, practical value, and easy communication so the experience feels smooth and trustworthy.'}
+          />
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            {siteMetrics.map((metric) => (
+              <article key={getLocalizedText(metric.label, locale)} className="site-panel">
+                <div className="text-2xl font-black text-primary">
+                  {getLocalizedText(metric.value, locale)}
+                </div>
+                <h3 className="mt-3 text-xl font-black text-foreground">
+                  {getLocalizedText(metric.label, locale)}
+                </h3>
+                <p className="mt-4 text-base leading-8 text-slate-600">
+                  {getLocalizedText(metric.description, locale)}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 }

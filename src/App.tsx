@@ -1,41 +1,38 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { CartProvider } from './contexts/CartContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import './lib/i18n';
 
-// Lazy load pages for performance (Optimization Stage)
 const HomePage = lazy(() => import('./pages/HomePage').then(module => ({ default: module.HomePage })));
 const ShopPage = lazy(() => import('./pages/ShopPage').then(module => ({ default: module.ShopPage })));
+const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage').then(module => ({ default: module.ProductDetailPage })));
 const CoursesPage = lazy(() => import('./pages/CoursesPage').then(module => ({ default: module.CoursesPage })));
 const CourseDetailPage = lazy(() => import('./pages/CourseDetailPage').then(module => ({ default: module.CourseDetailPage })));
-const LoginPage = lazy(() => import('./pages/LoginPage').then(module => ({ default: module.LoginPage })));
-const SignupPage = lazy(() => import('./pages/SignupPage').then(module => ({ default: module.SignupPage })));
-const DashboardPage = lazy(() => import('./pages/DashboardPage').then(module => ({ default: module.DashboardPage })));
-const CartPage = lazy(() => import('./pages/CartPage').then(module => ({ default: module.CartPage })));
-const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard').then(module => ({ default: module.AdminDashboard })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then(module => ({ default: module.AboutPage })));
 const ContactPage = lazy(() => import('./pages/ContactPage').then(module => ({ default: module.ContactPage })));
+const CartPage = lazy(() => import('./pages/CartPage').then(module => ({ default: module.CartPage })));
+const OrderPage = lazy(() => import('./pages/OrderPage').then(module => ({ default: module.OrderPage })));
+const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmationPage').then(module => ({ default: module.OrderConfirmationPage })));
+const AdminOrdersPage = lazy(() => import('./pages/admin/AdminOrdersPage').then(module => ({ default: module.AdminOrdersPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(module => ({ default: module.NotFoundPage })));
 
-// Landing Pages
-const PrintedProductLanding = lazy(() => import('./pages/PrintedProductLanding').then(module => ({ default: module.PrintedProductLanding })));
-const DigitalProductLanding = lazy(() => import('./pages/DigitalProductLanding').then(module => ({ default: module.DigitalProductLanding })));
-const CourseLanding = lazy(() => import('./pages/CourseLanding').then(module => ({ default: module.CourseLanding })));
-const CostCrafterLanding = lazy(() => import('./pages/CostCrafter/CostCrafterLanding'));
-const DaftarUstadLanding = lazy(() => import('./pages/DaftarUstad/DaftarUstadLanding'));
-
-// Loading Fallback
 const PageLoader = () => (
-  <div className="flex items-center justify-center min-h-screen bg-gray-50">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+  <div className="flex min-h-screen items-center justify-center bg-[linear-gradient(135deg,#f7f4ff_0%,#ffffff_55%,#fff8ea_100%)] px-4">
+    <div className="rounded-[2rem] border border-slate-200 bg-white px-8 py-10 text-center shadow-[0_32px_90px_-48px_rgba(49,11,130,0.45)]">
+      <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-[1.25rem] bg-[#f8f3ff] shadow-[0_18px_42px_-24px_rgba(49,11,130,0.4)]">
+        <img src="/logo-icon.png" alt="NawaEduTech" className="h-8 w-8 object-contain" />
+      </div>
+      <div className="text-lg font-black text-slate-950">NawaEduTech</div>
+      <div className="mt-2 text-sm font-bold text-slate-500">Loading...</div>
+    </div>
   </div>
 );
 
-// Main Layout Component
 const MainLayout = () => (
-  <div className="flex flex-col min-h-screen">
+  <div className="flex min-h-screen flex-col">
     <Header />
     <main className="flex-1">
       <Outlet />
@@ -47,37 +44,43 @@ const MainLayout = () => (
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <LanguageProvider>
+      <LanguageProvider>
+        <CartProvider>
           <Suspense fallback={<PageLoader />}>
             <Routes>
-              {/* Standard Platform Pages (Wrapped in Main Layout) */}
+              {/* Main site routes */}
               <Route element={<MainLayout />}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/shop" element={<ShopPage />} />
+                <Route path="/shop/:slug" element={<ProductDetailPage />} />
                 <Route path="/courses" element={<CoursesPage />} />
                 <Route path="/courses/:id" element={<CourseDetailPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/contact" element={<ContactPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignupPage />} />
-                <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/cart" element={<CartPage />} />
-                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/order" element={<OrderPage />} />
+                <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+
+                {/* Old redirects kept for compatibility */}
+                <Route path="/login" element={<Navigate to="/contact" replace />} />
+                <Route path="/signup" element={<Navigate to="/contact" replace />} />
+                <Route path="/dashboard" element={<Navigate to="/contact" replace />} />
+                <Route path="/landing/printed-product" element={<Navigate to="/shop" replace />} />
+                <Route path="/landing/digital-product" element={<Navigate to="/shop" replace />} />
+                <Route path="/landing/course" element={<Navigate to="/courses" replace />} />
+                <Route path="/cost-crafter" element={<Navigate to="/shop" replace />} />
+                <Route path="/daftar-ustad" element={<Navigate to="/shop" replace />} />
+
+                <Route path="*" element={<NotFoundPage />} />
               </Route>
 
-              {/* Standalone Landing Pages (No Header/Footer from Main Layout) */}
-              <Route path="/landing/printed-product" element={<PrintedProductLanding />} />
-              <Route path="/landing/digital-product" element={<DigitalProductLanding />} />
-              <Route path="/landing/course" element={<CourseLanding />} />
-
-              {/* Product Launch Pages */}
-              <Route path="/cost-crafter" element={<CostCrafterLanding />} />
-              <Route path="/daftar-ustad" element={<DaftarUstadLanding />} />
+              {/* Admin – no header/footer */}
+              <Route path="/admin" element={<Navigate to="/admin/orders" replace />} />
+              <Route path="/admin/orders" element={<AdminOrdersPage />} />
             </Routes>
           </Suspense>
-        </LanguageProvider>
-      </AuthProvider>
+        </CartProvider>
+      </LanguageProvider>
     </BrowserRouter>
   );
 }
