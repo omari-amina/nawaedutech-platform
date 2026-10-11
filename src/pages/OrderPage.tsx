@@ -17,7 +17,9 @@ import {
 import { useLanguage } from '../contexts/LanguageContext';
 import { useCart } from '../contexts/CartContext';
 import { resolveLocale } from '../data/brandSite';
+import { createOrder } from '../lib/api';
 import { formatPrice, generateOrderId, type Order } from '../data/storeData';
+import { getSettings } from '../lib/shopSettings';
 import {
   calculateShipping,
   FREE_SHIPPING_THRESHOLD,
@@ -77,6 +79,8 @@ export function OrderPage() {
   const { items, subtotal, clearCart } = useCart();
   const [selectedWilaya, setSelectedWilaya] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverMode, setServerMode] = useState<'unknown' | 'online' | 'local'>('unknown');
+  const [shopSettings] = useState(() => getSettings());
 
   usePageMeta({
     title: locale === 'ar' ? 'إتمام الطلب' : 'Checkout',
@@ -85,7 +89,8 @@ export function OrderPage() {
       : 'Enter your delivery information to complete your order',
   });
 
-  const shippingCost = calculateShipping(selectedWilaya, subtotal);
+  const freeThreshold = shopSettings.freeShippingThreshold || FREE_SHIPPING_THRESHOLD;
+  const shippingCost = calculateShipping(selectedWilaya, subtotal, freeThreshold);
   const orderTotal = subtotal + shippingCost;
   const wilayaInfo = getWilayaByCode(selectedWilaya);
 
@@ -116,7 +121,31 @@ export function OrderPage() {
     setIsSubmitting(true);
     try {
       const selectedWilayaData = getWilayaByCode(data.wilayaCode);
-      const orderId = generateOrderId();
+      // 1) Tente le backend (US-1/US-2); 2) fallback localStorage (legacy)
+      let orderId: string;
+      try {
+        const serverOrder = await createOrder({
+          fullName: data.fullName,
+          phone: data.phone,
+          phone2: data.phone2,
+          wilayaCode: data.wilayaCode,
+          commune: data.commune,
+          address: data.address,
+          paymentMethod: data.paymentMethod,
+          subtotal,
+          notes: data.notes,
+          items: items.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            unitPrice: item.price,
+          })),
+        });
+        orderId = (serverOrder as unknown as { id: string }).id;
+        setServerMode('online');
+        localStorage.setItem('nawaedutech_last_order', JSON.stringify({ ...serverOrder, shippingCost, total: orderTotal }));
+      } catch {
+        setServerMode('local');
+        orderId = generateOrderId();
 
       const order: Partial<Order> = {
         id: orderId,
@@ -165,6 +194,7 @@ export function OrderPage() {
       existingOrders.push(order);
       localStorage.setItem('nawaedutech_orders', JSON.stringify(existingOrders));
       localStorage.setItem('nawaedutech_last_order', JSON.stringify(order));
+      } // end fallback local (inner catch)
 
       clearCart();
       navigate(`/order-confirmation?id=${orderId}`);
@@ -191,6 +221,14 @@ export function OrderPage() {
 
           {/* Trust badges */}
           <div className="mt-6 flex flex-wrap gap-4">
+            {serverMode !== 'unknown' && (
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-600">
+                <span className={serverMode === 'online' ? 'text-green-600' : 'text-amber-600'}>●</span>
+                {serverMode === 'online'
+                  ? (locale === 'ar' ? 'متصل بالخادم' : 'Server connected')
+                  : (locale === 'ar' ? 'وضع محلي (بدون خادم)' : 'Local mode')}
+              </div>
+            )}
             {[
               { icon: <ShieldCheck size={16} />, text: locale === 'ar' ? 'تسوق آمن ومضمون' : 'Safe & secure' },
               { icon: <Truck size={16} />, text: locale === 'ar' ? 'توصيل لكل ولايات الجزائر' : 'Delivery across Algeria' },
@@ -404,19 +442,19 @@ export function OrderPage() {
                   })}
                 </div>
 
-                {/* CCP / BaridiMob info */}
+                {/* CCP / BaridiMob info (from admin settings) */}
                 {watch('paymentMethod') === 'ccp' && (
                   <div className="mt-5 rounded-[1.5rem] border border-amber-100 bg-amber-50 p-5 text-sm leading-7 text-amber-800">
                     <strong>CCP:</strong> {locale === 'ar'
-                      ? 'رقم الحساب: 00700-1234567-89 — باسم: نوى للتعليم والتكنولوجيا. أرسلي إيصال التحويل عبر واتساب.'
-                      : 'Account: 00700-1234567-89 — Name: Nawa EduTech. Send transfer receipt via WhatsApp.'}
+                      ? `رقم الحساب: ${shopSettings.ccpAccount} — باسم: ${shopSettings.ccpName}. أرسلي إيصال التحويل عبر واتساب.`
+                      : `Account: ${shopSettings.ccpAccount} — Name: ${shopSettings.ccpName}. Send transfer receipt via WhatsApp.`}
                   </div>
                 )}
                 {watch('paymentMethod') === 'baridimob' && (
                   <div className="mt-5 rounded-[1.5rem] border border-blue-100 bg-blue-50 p-5 text-sm leading-7 text-blue-800">
                     <strong>BaridiMob:</strong> {locale === 'ar'
-                      ? 'رقم الهاتف: 0555-123-456. أرسلي لقطة الشاشة بعد التحويل عبر واتساب.'
-                      : 'Phone: 0555-123-456. Send screenshot after transfer via WhatsApp.'}
+                      ? `رقم الهاتف: ${shopSettings.baridimobPhone}. أرسلي لقطة الشاشة بعد التحويل عبر واتساب.`
+                      : `Phone: ${shopSettings.baridimobPhone}. Send screenshot after transfer via WhatsApp.`}
                   </div>
                 )}
               </div>
@@ -459,11 +497,11 @@ export function OrderPage() {
                           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-base font-black text-white"
                           style={{ background: 'linear-gradient(145deg,#310b82,#5b2bbf)' }}
                         >
-                          {item.title[locale].charAt(0)}
+                          {(item.title[locale] ?? item.title.ar).charAt(0)}
                         </div>
                         <div>
                           <div className="text-sm font-black text-foreground line-clamp-1">
-                            {item.title[locale]}
+                            {(item.title[locale] ?? item.title.ar)}
                           </div>
                           <div className="text-xs font-bold text-slate-500">× {item.quantity}</div>
                         </div>
@@ -501,11 +539,11 @@ export function OrderPage() {
                     </span>
                   </div>
 
-                  {subtotal < FREE_SHIPPING_THRESHOLD && (
+                  {subtotal < freeThreshold && (
                     <div className="rounded-xl bg-accent/8 p-3 text-xs font-bold text-slate-600">
                       💡 {locale === 'ar'
-                        ? `أضيفي ${formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} للحصول على توصيل مجاني`
-                        : `Add ${formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} for free shipping`}
+                        ? `أضيفي ${formatPrice(freeThreshold - subtotal)} للحصول على توصيل مجاني`
+                        : `Add ${formatPrice(freeThreshold - subtotal)} for free shipping`}
                     </div>
                   )}
 

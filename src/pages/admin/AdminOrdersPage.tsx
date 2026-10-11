@@ -44,7 +44,7 @@ const ALL_STATUSES: OrderStatus[] = [
 // Component
 // ────────────────────────────────────────────────────────────────
 
-export function AdminOrdersPage() {
+export function AdminOrdersPage({ embedded = false }: { embedded?: boolean }) {
   const { language } = useLanguage();
   const locale = resolveLocale(language);
   const [orders, setOrders] = useState<Partial<Order>[]>([]);
@@ -129,8 +129,9 @@ export function AdminOrdersPage() {
   const isRTL = locale === 'ar';
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className={embedded ? '' : 'min-h-screen bg-slate-50'}>
       {/* Header */}
+      {!embedded && (
       <div className="border-b border-slate-200 bg-white px-6 py-5 sticky top-0 z-40">
         <div className="container mx-auto flex items-center justify-between gap-4">
           <div>
@@ -148,8 +149,28 @@ export function AdminOrdersPage() {
           </button>
         </div>
       </div>
+      )}
 
-      <div className="container mx-auto px-4 py-8">
+      <div className={embedded ? '' : 'container mx-auto px-4 py-8'}>
+        {embedded && (
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-black text-slate-950 md:text-3xl">
+                {isRTL ? 'الطلبات' : 'Commandes'}
+              </h1>
+              <p className="mt-1 text-sm font-bold text-slate-500">
+                {orders.length} {isRTL ? 'طلب' : 'commandes'} • {formatPrice(totalRevenue)}
+              </p>
+            </div>
+            <button
+              onClick={loadOrders}
+              className="inline-flex items-center gap-2 rounded-2xl bg-white px-4 py-2.5 text-sm font-black text-slate-600 shadow-sm transition hover:text-slate-950"
+            >
+              <RefreshCw size={15} />
+              {isRTL ? 'تحديث' : 'Actualiser'}
+            </button>
+          </div>
+        )}
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-8 mb-8">
           <div className="col-span-2 rounded-[1.75rem] bg-primary p-5 text-white">

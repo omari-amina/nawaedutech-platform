@@ -181,7 +181,7 @@ const CostCrafterLanding = () => {
                             <span className={styles.paymentBadge}>BaridiMob</span>
                         </div>
 
-                        <a href="https://tally.so/r/placeholder" target="_blank" rel="noopener noreferrer" className={`${styles.btnPrimaryLg} ${styles.btnFullWidth}`}>
+                        <a href="/order?product=costcrafter-pro" target="_blank" rel="noopener noreferrer" className={`${styles.btnPrimaryLg} ${styles.btnFullWidth}`}>
                             اطلبي نسختك الآن
                         </a>
                         <p className={styles.guaranteeNote}>
@@ -229,9 +229,9 @@ const CostCrafterLanding = () => {
                 <div className={styles.wrapper}>
                     <h2 className={`${styles.logo} ${styles.footerLogo}`}>Nawa<span>EduTech</span></h2>
                     <div className={styles.socials}>
-                        <a href="#" title="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" title="Instagram"><i className="fa-brands fa-instagram"></i></a>
-                        <a href="#" title="Telegram"><i className="fa-brands fa-telegram"></i></a>
+                        <a href="/contact" title="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
+                        <a href="/contact" title="Instagram"><i className="fa-brands fa-instagram"></i></a>
+                        <a href="/contact" title="Telegram"><i className="fa-brands fa-telegram"></i></a>
                     </div>
                     <p className={styles.footerNote}>
                         © 2026 NawaEduTech. جميع الحقوق محفوظة. <br />
@@ -241,7 +241,7 @@ const CostCrafterLanding = () => {
             </footer>
 
             {/* Floating Telegram Button */}
-            <a href="https://t.me/placeholder" className={styles.floatingBtn} target="_blank" rel="noopener noreferrer" title="Contact us on Telegram">
+            <a href="/contact?subject=CostCrafter%20Pro" className={styles.floatingBtn} target="_blank" rel="noopener noreferrer" title="Contact us on Telegram">
                 <i className="fa-brands fa-telegram"></i>
             </a>
         </div>

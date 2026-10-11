@@ -13,12 +13,12 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import {
-  brandProducts,
   getLocalizedList,
   getLocalizedText,
   resolveLocale,
 } from '../data/brandSite';
-import { getExtendedProductById, formatPrice } from '../data/storeData';
+import { getCatalogExtById, getCatalogProduct } from '../lib/catalogStore';
+import { formatPrice } from '../data/storeData';
 import { useCart } from '../contexts/CartContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 
@@ -30,10 +30,10 @@ export function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [addedFeedback, setAddedFeedback] = useState(false);
 
-  // Find the brandSite product
-  const brandProduct = brandProducts.find((p) => p.slug === slug || p.id === slug);
-  // Find the extended product for pricing
-  const extProduct = slug ? getExtendedProductById(slug) : undefined;
+  // Find the product in the merged admin catalog (built-in + admin edits)
+  const found = slug ? getCatalogProduct(slug) : undefined;
+  const brandProduct = found?.brand;
+  const extProduct = found?.ext ?? (slug ? getCatalogExtById(slug) : undefined);
 
   const title = brandProduct ? getLocalizedText(brandProduct.title, locale) : '';
   const pageTitle = brandProduct ? title : (locale === 'ar' ? 'المنتج غير موجود' : 'Product not found');

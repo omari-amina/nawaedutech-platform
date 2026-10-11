@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { ShoppingCart, CheckCircle2, Star, Package, Truck, Shield } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
 
 /**
  * Landing Page Template for Printed Products
@@ -119,14 +121,16 @@ export function PrintedProductLanding() {
     const isRTL = i18n.language === 'ar';
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(1);
+    const navigate = useNavigate();
+    const { addItem } = useCart();
 
     const title = isRTL ? PRODUCT_DATA.title_ar : PRODUCT_DATA.title_en;
     const subtitle = isRTL ? PRODUCT_DATA.subtitle_ar : PRODUCT_DATA.subtitle_en;
     const heroDesc = isRTL ? PRODUCT_DATA.heroDescription_ar : PRODUCT_DATA.heroDescription_en;
 
     const handleAddToCart = () => {
-        // TODO: Implement add to cart functionality
-        alert(`تمت إضافة ${quantity} من ${title} إلى السلة!`);
+        addItem({ productId: 'printed-weekly-planner', quantity, price: PRODUCT_DATA.price, title: { ar: PRODUCT_DATA.title_ar, en: PRODUCT_DATA.title_en }, productType: 'printed' });
+        navigate('/cart');
     };
 
     return (

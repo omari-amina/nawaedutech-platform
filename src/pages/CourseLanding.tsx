@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Play, CheckCircle2, Star, Clock, Users, Award, BookOpen, Video } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Landing Page Template for Online Courses
@@ -217,6 +218,7 @@ export function CourseLanding() {
     const { t, i18n } = useTranslation();
     const isRTL = i18n.language === 'ar';
     const [openModule, setOpenModule] = useState<number | null>(0);
+    const navigate = useNavigate();
     const [openFaq, setOpenFaq] = useState<number | null>(null);
 
     const title = isRTL ? COURSE_DATA.title_ar : COURSE_DATA.title_en;
@@ -224,8 +226,7 @@ export function CourseLanding() {
     const heroDesc = isRTL ? COURSE_DATA.heroDescription_ar : COURSE_DATA.heroDescription_en;
 
     const handleEnroll = () => {
-        // TODO: Implement enrollment functionality
-        alert(`جاري تسجيلك في دورة: ${title}`);
+        navigate(`/contact?subject=` + encodeURIComponent('تسجيل: ' + title));
     };
 
     return (

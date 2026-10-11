@@ -22,3 +22,6 @@ dist-ssr
 *.pdf
 tmp-theme-golden/
 nawaedutech-theme*
+
+# Runtime data (local orders/contacts, recreated at boot)
+server/data/*.json

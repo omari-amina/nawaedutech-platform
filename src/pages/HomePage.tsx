@@ -11,7 +11,6 @@ import {
 import { useLanguage } from '../contexts/LanguageContext';
 import {
   brandCourses,
-  brandProducts,
   brandStory,
   brandTestimonials,
   getLocalizedText,
@@ -21,6 +20,7 @@ import {
   siteCopy,
   siteMetrics,
 } from '../data/brandSite';
+import { useBrandProducts } from '../hooks/useCatalog';
 import { SiteSectionHeading } from '../components/SiteSectionHeading';
 import { SiteProductCard } from '../components/SiteProductCard';
 import { SiteCourseCard } from '../components/SiteCourseCard';
@@ -33,6 +33,7 @@ const journeyIcons = [Boxes, GraduationCap, MessageCircleMore];
 export function HomePage() {
   const { language } = useLanguage();
   const locale = resolveLocale(language);
+  const brandProducts = useBrandProducts();
 
   usePageMeta({
     title: locale === 'ar' ? 'الرئيسية' : 'Home',

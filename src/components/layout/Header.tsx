@@ -17,7 +17,8 @@ export function Header() {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const primaryCta = locale === 'ar' ? 'اطلبي الآن' : 'Start now';
+  const primaryCta = locale === 'ar' ? 'اطلبي الآن' : locale === 'fr' ? 'Commander' : 'Start now';
+  const langLabel = locale === 'ar' ? 'FR' : locale === 'fr' ? 'EN' : 'AR';
 
   return (
     <header className="sticky top-0 z-50 px-4 py-4">
@@ -81,7 +82,7 @@ export function Header() {
                 className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-black text-slate-700 transition hover:border-primary/25 hover:text-primary"
               >
                 <Globe size={16} />
-                {locale === 'ar' ? 'EN' : 'AR'}
+                {langLabel}
               </button>
 
               <Link to="/contact" className="site-button-gold px-5 py-3">
@@ -126,7 +127,7 @@ export function Header() {
                     className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-black text-primary shadow-sm"
                   >
                     <Globe size={16} />
-                    {locale === 'ar' ? 'EN' : 'AR'}
+                    {langLabel}
                   </button>
                 </div>
 

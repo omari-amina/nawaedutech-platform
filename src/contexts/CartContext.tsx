@@ -8,7 +8,7 @@ export interface CartItem {
   productId: string;
   quantity: number;
   price: number;
-  title: { ar: string; en: string };
+  title: { ar: string; en: string; fr?: string };
   image?: string;
   productType: 'printed' | 'digital' | 'bundle';
 }

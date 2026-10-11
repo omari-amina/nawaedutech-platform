@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
-// Simplified User Type since we don't have supabase.User anymore
 interface User {
   id: string;
   email?: string;
@@ -9,6 +9,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  isConfigured: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, fullName: string, role: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -16,26 +17,58 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user] = useState<User | null>(null);
-  const [loading] = useState(false);
+const UNAVAILABLE_AR = 'تسجيل الدخول غير متاح حالياً (لم يتم ضبط Supabase). يمكنك الطلب بدون حساب أو التواصل معنا.';
+const UNAVAILABLE_EN = 'Auth is not configured (Supabase env missing). You can order without an account.';
 
-  const signIn = async () => {
-    console.log("Auth is disabled in static mode");
-    alert("تسجيل الدخول غير متاح حالياً. يرجى التواصل معنا لطلب المنتجات.");
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const isConfigured = isSupabaseConfigured();
+
+  useEffect(() => {
+    if (!isConfigured) {
+      setLoading(false);
+      return;
+    }
+    supabase.auth.getSession().then(({ data }) => {
+      const u = data.session?.user;
+      setUser(u ? { id: u.id, email: u.email ?? undefined } : null);
+      setLoading(false);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_ev, session) => {
+      const u = session?.user;
+      setUser(u ? { id: u.id, email: u.email ?? undefined } : null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [isConfigured]);
+
+  const signIn = async (email: string, password: string) => {
+    if (!isConfigured) throw new Error(document.documentElement.lang === 'ar' ? UNAVAILABLE_AR : UNAVAILABLE_EN);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
   };
 
-  const signUp = async () => {
-    console.log("Auth is disabled in static mode");
-    alert("التسجيل غير متاح حالياً. يرجى التواصل معنا لطلب المنتجات.");
+  const signUp = async (email: string, password: string, fullName: string, _role: string) => {
+    if (!isConfigured) throw new Error(document.documentElement.lang === 'ar' ? UNAVAILABLE_AR : UNAVAILABLE_EN);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: fullName } },
+    });
+    if (error) throw error;
   };
 
   const signOut = async () => {
-    // No-op
+    if (!isConfigured) {
+      setUser(null);
+      return;
+    }
+    await supabase.auth.signOut();
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isConfigured, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

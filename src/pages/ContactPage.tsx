@@ -1,4 +1,4 @@
-import { cloneElement, isValidElement, useEffect, type ReactElement, type ReactNode } from 'react';
+import { cloneElement, isValidElement, useEffect, useState, type ReactElement, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,6 +13,7 @@ import {
 } from '../data/brandSite';
 import { SiteSectionHeading } from '../components/SiteSectionHeading';
 import { usePageMeta } from '../hooks/usePageMeta';
+import { createContact } from '../lib/api';
 
 const formSchema = z.object({
   name: z.string().min(2),
@@ -61,11 +62,24 @@ export function ContactPage() {
     });
   }, [initialMessage, initialSubject, reset]);
 
-  const onSubmit = (data: ContactFormValues) => {
-    const subjectPrefix = locale === 'ar'
-      ? 'رسالة من موقع NawaEduTech: '
-      : 'Message from NawaEduTech website: ';
-    const body = [
+  const [sentState, setSentState] = useState<'idle' | 'online' | 'maillocal'>('idle');
+
+  const onSubmit = async (data: ContactFormValues) => {
+    // US-2: POST backend d'abord, fallback mailto si offline
+    try {
+      await createContact({
+        name: data.name ?? '',
+        email: data.email ?? '',
+        subject: data.subject ?? '',
+        message: data.message ?? '',
+      });
+      setSentState('online');
+    } catch {
+      setSentState('maillocal');
+      const subjectPrefix = locale === 'ar'
+        ? 'رسالة من موقع NawaEduTech: '
+        : 'Message from NawaEduTech website: ';
+      const body = [
       locale === 'ar' ? `الاسم: ${data.name}` : `Name: ${data.name}`,
       locale === 'ar' ? `البريد الإلكتروني: ${data.email}` : `Email: ${data.email}`,
       '',
@@ -76,6 +90,7 @@ export function ContactPage() {
     window.location.href = `mailto:contact@nawaedutech.com?subject=${encodeURIComponent(
       `${subjectPrefix}${data.subject}`,
     )}&body=${encodeURIComponent(body)}`;
+    }
 
     reset({
       name: '',
@@ -185,6 +200,14 @@ export function ContactPage() {
                 ? 'بعد الإرسال سيفتح بريدك الإلكتروني برسالة جاهزة، ويمكنك أيضًا استخدام واتساب للتواصل السريع.'
                 : 'After submission, your email app will open with a ready-to-send message. You can also use WhatsApp for faster contact.'}
             />
+
+            {sentState !== 'idle' && (
+              <div className={`rounded-[1.25rem] border p-4 text-sm font-bold ${sentState === 'online' ? 'border-green-200 bg-green-50 text-green-800' : 'border-amber-200 bg-amber-50 text-amber-800'}`}>
+                {sentState === 'online'
+                  ? (locale === 'ar' ? '✅ تم استلام رسالتك بنجاح، سنرد عليك قريبًا.' : '✅ Message received, we will reply soon.')
+                  : (locale === 'ar' ? 'تم تجهيز رسالة بريدية كاحتياطي (الخادم غير متاح).' : 'Mail client opened as fallback (server offline).')}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-5">
               <div className="grid gap-5 md:grid-cols-2">

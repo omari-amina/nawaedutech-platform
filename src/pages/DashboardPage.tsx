@@ -46,32 +46,52 @@ export function DashboardPage() {
 
   const loadDashboardData = async () => {
     if (!user) return;
+    try {
+      // Load enrollments with course details
+      const { data: enrollmentData } = await supabase
+        .from('enrollments')
+        .select('*, course:courses(title_en, title_ar)')
+        .eq('user_id', user.id)
+        .order('enrolled_at', { ascending: false });
 
-    // Load enrollments with course details
-    const { data: enrollmentData } = await supabase
-      .from('enrollments')
-      .select('*, course:courses(title_en, title_ar)')
-      .eq('user_id', user.id)
-      .order('enrolled_at', { ascending: false });
+      if (enrollmentData) {
+        // Map to include optional chaining or default values if course is missing
+        const mappedEnrollments: any[] = enrollmentData.map((e: any) => ({
+          ...e,
+          course: e.course || { title_en: 'Unknown Course', title_ar: 'دورة غير معروفة' }
+        }));
+        setEnrollments(mappedEnrollments);
+      }
 
-    if (enrollmentData) {
-      // Map to include optional chaining or default values if course is missing
-      const mappedEnrollments: any[] = enrollmentData.map((e: any) => ({
-        ...e,
-        course: e.course || { title_en: 'Unknown Course', title_ar: 'دورة غير معروفة' }
-      }));
-      setEnrollments(mappedEnrollments);
+      // Load orders (serveur Supabase, fallback localStorage)
+      const { data: orderData } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      if (orderData && orderData.length > 0) {
+        setOrders(orderData);
+      } else {
+        try {
+          const local = JSON.parse(localStorage.getItem('nawaedutech_orders') ?? '[]') as any[];
+          setOrders(local.map((o: any) => ({
+            id: o.id, order_number: o.id, total: o.total ?? 0,
+            status: o.status ?? 'pending', created_at: o.createdAt ?? new Date().toISOString(),
+          })));
+        } catch { /* ignore */ }
+      }
+    } catch {
+      // Tables absentes / offline → fallback local silencieux
+      try {
+        const local = JSON.parse(localStorage.getItem('nawaedutech_orders') ?? '[]') as any[];
+        setOrders(local.map((o: any) => ({
+          id: o.id, order_number: o.id, total: o.total ?? 0,
+          status: o.status ?? 'pending', created_at: o.createdAt ?? new Date().toISOString(),
+        })));
+      } catch { /* ignore */ }
+    } finally {
+      setLoading(false);
     }
-
-    // Load orders
-    const { data: orderData } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('created_at', { ascending: false });
-    if (orderData) setOrders(orderData);
-
-    setLoading(false);
   };
 
   if (authLoading || loading) {

@@ -1,4 +1,4 @@
-export type SiteLocale = 'ar' | 'en';
+export type SiteLocale = 'ar' | 'en' | 'fr';
 
 export type LocalizedText = {
   ar: string;
@@ -591,15 +591,17 @@ export const siteCopy = {
 };
 
 export function resolveLocale(language: string): SiteLocale {
-  return language === 'en' ? 'en' : 'ar';
+  if (language === 'en') return 'en';
+  if (language === 'fr') return 'fr';
+  return 'ar';
 }
 
 export function getLocalizedText(value: LocalizedText, locale: SiteLocale): string {
-  return value[locale];
+  return (value as Record<string, string>)[locale] ?? value.ar;
 }
 
 export function getLocalizedList(value: LocalizedList, locale: SiteLocale): string[] {
-  return value[locale];
+  return (value as Record<string, string[]>)[locale] ?? value.ar;
 }
 
 export function getCourseBySlug(slug?: string): CourseItem | undefined {

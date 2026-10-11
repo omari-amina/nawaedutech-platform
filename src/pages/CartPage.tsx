@@ -121,7 +121,7 @@ export function CartPage() {
                     background: 'linear-gradient(145deg, #310b82, #5b2bbf)',
                   }}
                 >
-                  {item.title[locale].charAt(0)}
+                  {(item.title[locale] ?? item.title.ar).charAt(0)}
                 </div>
 
                 {/* Info */}
@@ -129,7 +129,7 @@ export function CartPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="text-lg font-black text-foreground">
-                        {item.title[locale]}
+                        {(item.title[locale] ?? item.title.ar)}
                       </h3>
                       <span className="mt-1 inline-block rounded-full bg-primary/8 px-3 py-1 text-xs font-bold text-primary capitalize">
                         {item.productType}

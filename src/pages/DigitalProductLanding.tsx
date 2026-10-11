@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Download, CheckCircle2, Star, Zap, FileText, Lock } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../contexts/CartContext';
 
 /**
  * Landing Page Template for Digital Products
@@ -159,14 +161,16 @@ export function DigitalProductLanding() {
     const isRTL = i18n.language === 'ar';
     const [selectedImage, setSelectedImage] = useState(0);
     const [openFaq, setOpenFaq] = useState<number | null>(null);
+    const navigate = useNavigate();
+    const { addItem } = useCart();
 
     const title = isRTL ? PRODUCT_DATA.title_ar : PRODUCT_DATA.title_en;
     const subtitle = isRTL ? PRODUCT_DATA.subtitle_ar : PRODUCT_DATA.subtitle_en;
     const heroDesc = isRTL ? PRODUCT_DATA.heroDescription_ar : PRODUCT_DATA.heroDescription_en;
 
     const handlePurchase = () => {
-        // TODO: Implement purchase functionality
-        alert(`جاري تحويلك لصفحة الدفع لشراء ${title}`);
+        addItem({ productId: 'digital-lesson-templates', quantity: 1, price: PRODUCT_DATA.price, title: { ar: PRODUCT_DATA.title_ar, en: PRODUCT_DATA.title_en }, productType: 'digital' });
+        navigate('/order');
     };
 
     return (

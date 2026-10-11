@@ -178,8 +178,8 @@ export function getDeliveryTimeText(wilayaCode: string): string {
 
 export const FREE_SHIPPING_THRESHOLD = 5000;
 
-export function calculateShipping(wilayaCode: string, orderSubtotal: number): number {
-  if (orderSubtotal >= FREE_SHIPPING_THRESHOLD) return 0;
+export function calculateShipping(wilayaCode: string, orderSubtotal: number, freeThreshold: number = FREE_SHIPPING_THRESHOLD): number {
+  if (orderSubtotal >= freeThreshold) return 0;
   return getShippingPrice(wilayaCode);
 }
 

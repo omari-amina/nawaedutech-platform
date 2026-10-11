@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpLeft, CircleCheckBig, PackageSearch, ShoppingBag, WandSparkles } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { brandProducts, getLocalizedText, resolveLocale } from '../data/brandSite';
+import { getLocalizedText, resolveLocale } from '../data/brandSite';
+import { useBrandProducts } from '../hooks/useCatalog';
 import { SiteSectionHeading } from '../components/SiteSectionHeading';
 import { SiteProductCard } from '../components/SiteProductCard';
 import { usePageMeta } from '../hooks/usePageMeta';
@@ -24,6 +25,7 @@ const purchaseSteps = [
 export function ShopPage() {
   const { language } = useLanguage();
   const locale = resolveLocale(language);
+  const brandProducts = useBrandProducts();
 
   usePageMeta({
     title: locale === 'ar' ? 'المنتجات' : 'Products',

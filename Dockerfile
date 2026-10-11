@@ -12,6 +12,10 @@ RUN npm install
 # Copy source code
 COPY . .
 
+# Build-time API URL (Vite bakes env at build time)
+ARG VITE_API_URL=http://localhost:5000
+ENV VITE_API_URL=$VITE_API_URL
+
 # Build the application
 RUN npm run build:prod
 

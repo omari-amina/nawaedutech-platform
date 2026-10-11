@@ -39,7 +39,7 @@ const DaftarUstadLanding = () => {
                         </a>
                     </div>
 
-                    <img src="https://placehold.co/900x500/3b82f6/ffffff?text=Daftar+Ustad+Dashboard+Preview" alt="Daftar Ustad Preview" className={styles.heroImage} />
+                    <img src="/logo-slogan.png" alt="Daftar Ustad Preview" className={styles.heroImage} />
                 </div>
             </section>
 
@@ -84,7 +84,7 @@ const DaftarUstadLanding = () => {
                             </ul>
                         </div>
                         <div className={styles.analysisVisual}>
-                            <img src="https://placehold.co/600x400/1e293b/ffffff?text=Analysis+Graphs+Preview" alt="Analysis Preview" className={styles.analysisImg} />
+                            <img src="/hero-illustration.png" alt="Analysis Preview" className={styles.analysisImg} />
                         </div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@ const DaftarUstadLanding = () => {
                             <li><i className="fa-solid fa-check"></i> دعم فني مخصص للأستاذ</li>
                         </ul>
 
-                        <a href="https://t.me/placeholder" className={styles.btnPrimaryLg}>
+                        <a href="/contact?subject=Daftar%20Ustad" className={styles.btnPrimaryLg}>
                             اطلب تفعيل البرنامج الآن
                         </a>
                         <p className={styles.pricingSubNote}>
